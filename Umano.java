@@ -5,7 +5,11 @@ public class Umano extends Agente {
     }
 
     @Override
-    public void agisci() {
-        System.out.println("L'umano si muove.");
+    public void agisci(Mappa mappa) {
+        muovi(1, 0, mappa);
+
+        System.out.println(
+        "L'umano si muove a (" + x + ", " + y + ")"
+        );
     }
 }

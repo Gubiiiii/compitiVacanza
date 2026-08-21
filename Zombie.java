@@ -5,7 +5,12 @@ public class Zombie extends Agente {
     }
 
     @Override
-    public void agisci() {
-        System.out.println("Lo zombie cerca un umano.");
-    }
+    public void agisci(Mappa mappa) {
+        muovi(-1, 0, mappa);
+
+         System.out.println(
+        "Lo zombie si muove a (" + x + ", " + y + ")"
+    );
+}
+    
 }

@@ -12,7 +12,18 @@ public abstract class Agente {
         this.velocita = velocita;
     }
 
-    public abstract void agisci();
+    public void muovi(int dx, int dy, Mappa mappa) {
+
+        int nuovaX = x + dx;
+        int nuovaY = y + dy;
+
+        if (mappa.posizioneValida(nuovaX, nuovaY)) {
+            x = nuovaX;
+            y = nuovaY;
+        }
+    }
+
+    public abstract void agisci(Mappa mappa);
 
     public int getX() {
         return x;

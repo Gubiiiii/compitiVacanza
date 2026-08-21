@@ -2,22 +2,36 @@ public class Main {
 
     public static void main(String[] args) {
 
+        Mappa mappa = new Mappa(10, 10);
+
         Umano umano = new Umano(2, 3);
-        Zombie zombie = new Zombie(8, 7);
+        Zombie zombie = new Zombie(8, 3);
 
-        System.out.println("Umano:");
-        System.out.println("Posizione: " + umano.getX() + ", " + umano.getY());
-        System.out.println("Salute: " + umano.getSalute());
+        System.out.println("POSIZIONI INIZIALI");
+
+        System.out.println(
+            "Umano: (" + umano.getX() + ", " + umano.getY() + ")"
+        );
+
+        System.out.println(
+            "Zombie: (" + zombie.getX() + ", " + zombie.getY() + ")"
+        );
 
         System.out.println();
 
-        System.out.println("Zombie:");
-        System.out.println("Posizione: " + zombie.getX() + ", " + zombie.getY());
-        System.out.println("Salute: " + zombie.getSalute());
+        umano.agisci(mappa);
+        zombie.agisci(mappa);
 
         System.out.println();
 
-        umano.agisci();
-        zombie.agisci();
+        System.out.println("POSIZIONI DOPO UN TURNO");
+
+        System.out.println(
+            "Umano: (" + umano.getX() + ", " + umano.getY() + ")"
+        );
+
+        System.out.println(
+            "Zombie: (" + zombie.getX() + ", " + zombie.getY() + ")"
+        );
     }
 }
