@@ -27,6 +27,38 @@ public class Simulatore {
             agente.agisci(mappa);
         }
 
+        controllaCollisioni();
+
         System.out.println();
+    }
+
+    private void controllaCollisioni() {
+
+        for (int i = 0; i < agenti.size(); i++) {
+
+            for (int j = i + 1; j < agenti.size(); j++) {
+
+                Agente primo = agenti.get(i);
+                Agente secondo = agenti.get(j);
+
+                if (primo.siTrovaNellaStessaPosizione(secondo)) {
+
+                    System.out.println(
+                        "COLLISIONE tra " +
+                        primo.getClass().getSimpleName() +
+                        " e " +
+                        secondo.getClass().getSimpleName()
+                    );
+
+                    if (primo instanceof Zombie && secondo instanceof Umano) {
+                        ((Zombie) primo).attacca((Umano) secondo);
+                    }
+
+                    if (primo instanceof Umano && secondo instanceof Zombie) {
+                        ((Zombie) secondo).attacca((Umano) primo);
+                    }
+                }
+            }
+        }
     }
 }

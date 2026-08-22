@@ -40,4 +40,17 @@ public abstract class Agente {
     public int getVelocita() {
         return velocita;
     }
+
+    public boolean siTrovaNellaStessaPosizione(Agente altro) {
+        return this.x == altro.x && this.y == altro.y;
+    }
+
+
+    public void subisciDanno(int danno) {
+        salute -= danno;
+
+        if (salute < 0) {
+            salute = 0;
+        }
+    }
 }
