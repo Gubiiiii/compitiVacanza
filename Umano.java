@@ -8,8 +8,6 @@ public class Umano extends Agente {
     public void agisci(Mappa mappa) {
         muovi(1, 0, mappa);
 
-        System.out.println(
-        "L'umano si muove a (" + x + ", " + y + ")"
-        );
+        System.out.println("L'umano si muove a (" + x + ", " + y + ")");
     }
 }

@@ -2,36 +2,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Mappa mappa = new Mappa(10, 10);
+       Mappa mappa = new Mappa(10, 10);
 
         Umano umano = new Umano(2, 3);
         Zombie zombie = new Zombie(8, 3);
 
-        System.out.println("POSIZIONI INIZIALI");
+        mappa.aggiungiAgente(umano);
+        mappa.aggiungiAgente(zombie);
 
-        System.out.println(
-            "Umano: (" + umano.getX() + ", " + umano.getY() + ")"
-        );
+        Simulatore simulatore = new Simulatore(mappa);
 
-        System.out.println(
-            "Zombie: (" + zombie.getX() + ", " + zombie.getY() + ")"
-        );
+        simulatore.aggiungiAgente(umano);
+        simulatore.aggiungiAgente(zombie);
 
-        System.out.println();
-
-        umano.agisci(mappa);
-        zombie.agisci(mappa);
-
-        System.out.println();
-
-        System.out.println("POSIZIONI DOPO UN TURNO");
-
-        System.out.println(
-            "Umano: (" + umano.getX() + ", " + umano.getY() + ")"
-        );
-
-        System.out.println(
-            "Zombie: (" + zombie.getX() + ", " + zombie.getY() + ")"
-        );
+        simulatore.eseguiTurno();
+        simulatore.eseguiTurno();
+        simulatore.eseguiTurno();
     }
 }

@@ -8,9 +8,7 @@ public class Zombie extends Agente {
     public void agisci(Mappa mappa) {
         muovi(-1, 0, mappa);
 
-         System.out.println(
-        "Lo zombie si muove a (" + x + ", " + y + ")"
-    );
+         System.out.println("Lo zombie si muove a (" + x + ", " + y + ")");
 }
     
 }
