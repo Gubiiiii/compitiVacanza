@@ -23,10 +23,17 @@ public class Simulatore {
 
         System.out.println("=== TICK " + tick + " ===");
 
+        // FASE 1: PERCEZIONE
+        for (Agente agente : agenti) {
+            agente.percepisci(mappa);
+        }
+
+        // FASE 2: AZIONE
         for (Agente agente : agenti) {
             agente.agisci(mappa);
         }
 
+        // FASE 3: COLLISIONI
         controllaCollisioni();
 
         System.out.println();

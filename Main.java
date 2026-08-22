@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-       Mappa mappa = new Mappa(10, 10);
+        Mappa mappa = new Mappa(10, 10);
 
         Umano umano = new Umano(2, 3);
         Zombie zombie = new Zombie(8, 3);

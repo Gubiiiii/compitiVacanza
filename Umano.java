@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Umano extends Agente {
 
     public Umano(int x, int y) {
@@ -5,9 +7,25 @@ public class Umano extends Agente {
     }
 
     @Override
+    public void percepisci(Mappa mappa) {
+
+        List<Agente> vicini = mappa.getAgentiVicini(this);
+
+        for (Agente agente : vicini) {
+
+            if (agente instanceof Zombie) {
+                System.out.println("L'umano vede uno zombie!");
+            }
+        }
+    }
+
+    @Override
     public void agisci(Mappa mappa) {
+
         muovi(1, 0, mappa);
 
-        System.out.println("L'umano si muove a (" + x + ", " + y + ")");
+        System.out.println(
+            "L'umano si muove a (" + x + ", " + y + ")"
+        );
     }
 }

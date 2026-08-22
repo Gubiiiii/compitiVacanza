@@ -12,8 +12,11 @@ public abstract class Agente {
         this.velocita = velocita;
     }
 
-    public void muovi(int dx, int dy, Mappa mappa) {
+    public abstract void percepisci(Mappa mappa);
 
+    public abstract void agisci(Mappa mappa);
+
+    public void muovi(int dx, int dy, Mappa mappa) {
         int nuovaX = x + dx;
         int nuovaY = y + dy;
 
@@ -23,7 +26,17 @@ public abstract class Agente {
         }
     }
 
-    public abstract void agisci(Mappa mappa);
+    public void subisciDanno(int danno) {
+        salute -= danno;
+
+        if (salute < 0) {
+            salute = 0;
+        }
+    }
+
+    public boolean siTrovaNellaStessaPosizione(Agente altro) {
+        return this.x == altro.x && this.y == altro.y;
+    }
 
     public int getX() {
         return x;
@@ -39,18 +52,5 @@ public abstract class Agente {
 
     public int getVelocita() {
         return velocita;
-    }
-
-    public boolean siTrovaNellaStessaPosizione(Agente altro) {
-        return this.x == altro.x && this.y == altro.y;
-    }
-
-
-    public void subisciDanno(int danno) {
-        salute -= danno;
-
-        if (salute < 0) {
-            salute = 0;
-        }
     }
 }

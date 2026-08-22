@@ -30,4 +30,26 @@ public class Mappa {
     public List<Agente> getAgenti() {
         return agenti;
     }
+
+
+    public List<Agente> getAgentiVicini(Agente agente) {
+
+        List<Agente> vicini = new ArrayList<>();
+
+        for (Agente altro : agenti) {
+
+            if (altro == agente) {
+                continue;
+            }
+
+            int distanzaX = Math.abs(agente.getX() - altro.getX());
+            int distanzaY = Math.abs(agente.getY() - altro.getY());
+
+            if (distanzaX <= 1 && distanzaY <= 1) {
+                vicini.add(altro);
+            }
+        }
+
+        return vicini;
+    }
 }
