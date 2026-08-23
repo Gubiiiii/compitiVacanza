@@ -35,9 +35,7 @@ public class Umano extends Agente {
                     "L'umano vede uno zombie!"
                 );
 
-                setStato(
-                    new InCombattimento((Zombie) agente)
-                );
+                setStato(new InCombattimento((Zombie) agente));
             }
         }
     }

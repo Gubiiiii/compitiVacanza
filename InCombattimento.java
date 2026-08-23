@@ -9,14 +9,22 @@ public class InCombattimento implements StatoUmano {
     @Override
     public void agisci(Umano umano, Mappa mappa) {
 
-        if (bersaglio.isVivo()) {
+        if (!bersaglio.isVivo()) {
+
+            System.out.println("Lo zombie è morto!");
+            return;
+        }
+
+        int distanza = umano.distanzaDa(bersaglio);
+
+        if (distanza <= 1) {
 
             umano.attacca(bersaglio);
 
         } else {
 
             System.out.println(
-                "Lo zombie è morto!"
+                "Lo zombie è troppo lontano per essere attaccato."
             );
         }
     }

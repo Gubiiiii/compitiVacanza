@@ -42,6 +42,10 @@ public abstract class Agente {
         return this.x == altro.x && this.y == altro.y;
     }
 
+    public int distanzaDa(Agente altro) {
+        return Math.abs(this.x - altro.x) + Math.abs(this.y - altro.y);
+    }
+
     public int getX() {
         return x;
     }
