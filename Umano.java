@@ -28,10 +28,15 @@ public class Umano extends Agente {
         for (Agente agente : vicini) {
 
             if (agente instanceof Zombie) {
+
                 zombiePercepito = true;
 
                 System.out.println(
                     "L'umano vede uno zombie!"
+                );
+
+                setStato(
+                    new InCombattimento((Zombie) agente)
                 );
             }
         }
@@ -41,5 +46,20 @@ public class Umano extends Agente {
     public void agisci(Mappa mappa) {
 
         stato.agisci(this, mappa);
+    }
+
+    public void attacca(Zombie zombie) {
+
+        int danno = 10;
+
+        zombie.subisciDanno(danno);
+
+        System.out.println(
+            "L'umano attacca lo zombie! -" + danno + " salute"
+        );
+
+        System.out.println(
+            "Salute zombie: " + zombie.getSalute()
+        );
     }
 }

@@ -34,6 +34,10 @@ public abstract class Agente {
         }
     }
 
+    public boolean isVivo() {
+        return salute > 0;
+    }
+
     public boolean siTrovaNellaStessaPosizione(Agente altro) {
         return this.x == altro.x && this.y == altro.y;
     }
