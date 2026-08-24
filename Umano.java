@@ -22,21 +22,26 @@ public class Umano extends Agente {
     @Override
     public void percepisci(Mappa mappa) {
 
-
-
         List<Agente> vicini = mappa.getAgentiVicini(this);
 
         for (Agente agente : vicini) {
 
             if (agente instanceof Zombie) {
 
-  
-
                 System.out.println(
                     "L'umano vede uno zombie!"
                 );
 
-                setStato(new InCombattimento((Zombie) agente));
+                if (professione instanceof Soldato) {
+
+                    setStato(
+                        new InCombattimento((Zombie) agente)
+                    );
+
+                } else {
+
+                    setStato(new InFuga());
+                }
             }
         }
     }
