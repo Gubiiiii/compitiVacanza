@@ -5,18 +5,11 @@ public class Main {
         Mappa mappa = new Mappa(10, 10);
 
         Umano umano = new Umano(4, 3);
-        Zombie zombie = new Zombie(5, 3);
+
+        umano.setProfessione(new Medico());
 
         mappa.aggiungiAgente(umano);
-        mappa.aggiungiAgente(zombie);
 
-        Simulatore simulatore = new Simulatore(mappa);
-
-        simulatore.aggiungiAgente(umano);
-        simulatore.aggiungiAgente(zombie);
-
-        simulatore.eseguiTurno();
-        simulatore.eseguiTurno();
-        simulatore.eseguiTurno();
+        umano.getProfessione().agisci(umano, mappa);
     }
 }

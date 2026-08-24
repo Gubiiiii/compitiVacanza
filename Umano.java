@@ -2,12 +2,13 @@ import java.util.List;
 
 public class Umano extends Agente {
 
-    private boolean zombiePercepito;
     private StatoUmano stato;
+    private Professione professione;
     public Umano(int x, int y) {
         super(x, y, 100, 2);
-        this.zombiePercepito = false;
+
         this.stato = new InEsplorazione();
+        this.professione = new Civile();
     }
 
     public void setStato(StatoUmano stato) {
@@ -21,7 +22,7 @@ public class Umano extends Agente {
     @Override
     public void percepisci(Mappa mappa) {
 
-        zombiePercepito = false;
+
 
         List<Agente> vicini = mappa.getAgentiVicini(this);
 
@@ -29,7 +30,7 @@ public class Umano extends Agente {
 
             if (agente instanceof Zombie) {
 
-                zombiePercepito = true;
+  
 
                 System.out.println(
                     "L'umano vede uno zombie!"
@@ -59,5 +60,13 @@ public class Umano extends Agente {
         System.out.println(
             "Salute zombie: " + zombie.getSalute()
         );
+    }
+
+    public void setProfessione(Professione professione) {
+        this.professione = professione;
+    }
+
+    public Professione getProfessione() {
+        return professione;
     }
 }
