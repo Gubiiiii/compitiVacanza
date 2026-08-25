@@ -51,7 +51,7 @@ public class Umano extends Agente {
 
     @Override
     public void agisci(Mappa mappa) {
-
+        raccogliRisorsa(mappa);
         stato.agisci(this, mappa);
     }
 
@@ -85,5 +85,33 @@ public class Umano extends Agente {
     }
     public List<Oggetto> getInventario() {
         return inventario;
+    }
+    public void raccogliRisorsa(Mappa mappa) {
+
+        Risorsa risorsa = mappa.getRisorsaAllaPosizione(x, y);
+
+        if (risorsa == null) {
+            return;
+        }
+
+        if (risorsa instanceof RisorsaMedikit) {
+
+            RisorsaMedikit medikit = (RisorsaMedikit) risorsa;
+
+            aggiungiOggetto(
+                new Medikit(medikit.getCura())
+            );
+
+        } else if (risorsa instanceof RisorsaMunizioni) {
+
+            RisorsaMunizioni munizioni =
+                (RisorsaMunizioni) risorsa;
+
+            aggiungiOggetto(
+                new Munizioni(munizioni.getQuantita())
+            );
+        }
+
+        mappa.getRisorse().remove(risorsa);
     }
 }

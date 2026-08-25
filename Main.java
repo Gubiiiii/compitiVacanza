@@ -8,8 +8,13 @@ public class Main {
         umano.setProfessione(new Soldato());
 
         // Test inventario
-        umano.aggiungiOggetto(new Medikit(30));
-        umano.aggiungiOggetto(new Munizioni(10));
+        mappa.aggiungiRisorsa(
+            new RisorsaMedikit(4, 3, 30)
+        );
+
+        mappa.aggiungiRisorsa(
+            new RisorsaMunizioni(6, 3, 10)
+        );
 
         Zombie zombie = new Zombie(5, 3);
 

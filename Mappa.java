@@ -6,11 +6,13 @@ public class Mappa {
     private int larghezza;
     private int altezza;
     private List<Agente> agenti;
+    private List<Risorsa> risorse;
 
     public Mappa(int larghezza, int altezza) {
         this.larghezza = larghezza;
         this.altezza = altezza;
         this.agenti = new ArrayList<>();
+        risorse = new ArrayList<>();
     }
 
     public boolean posizioneValida(int x, int y) {
@@ -51,5 +53,23 @@ public class Mappa {
         }
 
         return vicini;
+    }
+    public void aggiungiRisorsa(Risorsa risorsa) {
+        risorse.add(risorsa);
+    }
+    public List<Risorsa> getRisorse() {
+        return risorse;
+    }
+
+    public Risorsa getRisorsaAllaPosizione(int x, int y) {
+
+        for (Risorsa risorsa : risorse) {
+
+            if (risorsa.getX() == x && risorsa.getY() == y) {
+                return risorsa;
+            }
+        }
+
+        return null;
     }
 }
