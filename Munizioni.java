@@ -10,4 +10,8 @@ public class Munizioni extends Oggetto {
     public int getQuantita() {
         return quantita;
     }
+
+    public void usaMunizione() {
+        quantita--;
+    }
 }

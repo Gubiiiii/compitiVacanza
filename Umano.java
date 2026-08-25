@@ -51,7 +51,9 @@ public class Umano extends Agente {
 
     @Override
     public void agisci(Mappa mappa) {
+
         raccogliRisorsa(mappa);
+
         stato.agisci(this, mappa);
     }
 

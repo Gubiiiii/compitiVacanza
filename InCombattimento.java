@@ -19,7 +19,55 @@ public class InCombattimento implements StatoUmano {
 
         if (distanza <= 1) {
 
-            umano.attacca(bersaglio);
+            try {
+
+                Munizioni munizioni = null;
+
+                // Cerchiamo le munizioni nell'inventario
+                for (Oggetto oggetto : umano.getInventario()) {
+
+                    if (oggetto instanceof Munizioni) {
+                        munizioni = (Munizioni) oggetto;
+                        break;
+                    }
+                }
+
+                // Controlliamo se ci sono munizioni
+                if (munizioni == null) {
+
+                    throw new NoAmmoException(
+                        "Il soldato non ha munizioni!"
+                    );
+                }
+
+                if (munizioni.getQuantita() <= 0) {
+
+                    throw new NoAmmoException(
+                        "Il soldato ha finito le munizioni!"
+                    );
+                }
+
+                // Consuma una munizione
+                munizioni.usaMunizione();
+
+                System.out.println(
+                    "Il soldato usa una munizione!"
+                );
+
+                // Attacca lo zombie
+                umano.attacca(bersaglio);
+
+                System.out.println(
+                    "Munizioni rimaste: "
+                    + munizioni.getQuantita()
+                );
+
+            } catch (NoAmmoException e) {
+
+                System.out.println(
+                    "ERRORE: " + e.getMessage()
+                );
+            }
 
         } else {
 
