@@ -1,14 +1,17 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Umano extends Agente {
 
     private StatoUmano stato;
     private Professione professione;
+    private List<Oggetto> inventario;
     public Umano(int x, int y) {
         super(x, y, 100, 2);
 
         this.stato = new InEsplorazione();
         this.professione = new Civile();
+        this.inventario = new ArrayList<>();
     }
 
     public void setStato(StatoUmano stato) {
@@ -73,5 +76,14 @@ public class Umano extends Agente {
 
     public Professione getProfessione() {
         return professione;
+    }
+
+    public void aggiungiOggetto(Oggetto oggetto) {
+        inventario.add(oggetto);
+
+        System.out.println("L'umano ha raccolto: " + oggetto.getNome());
+    }
+    public List<Oggetto> getInventario() {
+        return inventario;
     }
 }

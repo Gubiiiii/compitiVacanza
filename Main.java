@@ -4,16 +4,22 @@ public class Main {
 
         Mappa mappa = new Mappa(10, 10);
 
-        Runner runner = new Runner(2, 3);
-        Tank tank = new Tank(7, 3);
+        Umano umano = new Umano(4, 3);
+        umano.setProfessione(new Soldato());
 
-        mappa.aggiungiAgente(runner);
-        mappa.aggiungiAgente(tank);
+        // Test inventario
+        umano.aggiungiOggetto(new Medikit(30));
+        umano.aggiungiOggetto(new Munizioni(10));
+
+        Zombie zombie = new Zombie(5, 3);
+
+        mappa.aggiungiAgente(umano);
+        mappa.aggiungiAgente(zombie);
 
         Simulatore simulatore = new Simulatore(mappa);
 
-        simulatore.aggiungiAgente(runner);
-        simulatore.aggiungiAgente(tank);
+        simulatore.aggiungiAgente(umano);
+        simulatore.aggiungiAgente(zombie);
 
         simulatore.eseguiTurno();
         simulatore.eseguiTurno();
