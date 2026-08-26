@@ -5,33 +5,28 @@ public class Main {
         // Creiamo la mappa
         Mappa mappa = new Mappa(10, 10);
 
-        // Creiamo un umano
-        Umano umano = new Umano(4, 3);
+        // Creiamo il medico
+        Umano medico = new Umano(4, 3);
+        medico.setProfessione(new Medico());
 
-        // Gli assegniamo la professione Soldato
-        umano.setProfessione(new Soldato());
+        // Feriamo il medico
+        medico.subisciDanno(70);
 
-        // Creiamo uno zombie vicino all'umano
-        Zombie zombie = new Zombie(5, 3);
+        // Gli diamo un Medikit
+        medico.aggiungiOggetto(new Medikit(30));
 
-        // Mettiamo Medikit e Munizioni nella stessa cella dell'umano
-        mappa.aggiungiRisorsa(
-            new RisorsaMedikit(4, 3, 30)
-        );
-
-        mappa.aggiungiRisorsa(
-            new RisorsaMunizioni(4, 3, 2)
-        );
+        // Creiamo uno zombie lontano
+        Zombie zombie = new Zombie(8, 3);
 
         // Aggiungiamo gli agenti alla mappa
-        mappa.aggiungiAgente(umano);
+        mappa.aggiungiAgente(medico);
         mappa.aggiungiAgente(zombie);
 
         // Creiamo il simulatore
         Simulatore simulatore = new Simulatore(mappa);
 
         // Aggiungiamo gli agenti al simulatore
-        simulatore.aggiungiAgente(umano);
+        simulatore.aggiungiAgente(medico);
         simulatore.aggiungiAgente(zombie);
 
         // Eseguiamo 3 turni

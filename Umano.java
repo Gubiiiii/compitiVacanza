@@ -37,12 +37,9 @@ public class Umano extends Agente {
 
                 if (professione instanceof Soldato) {
 
-                    setStato(
-                        new InCombattimento((Zombie) agente)
-                    );
-
+                    setStato(new InCombattimento((Zombie) agente));
+                } else if (professione instanceof Medico) {
                 } else {
-
                     setStato(new InFuga());
                 }
             }
@@ -53,6 +50,10 @@ public class Umano extends Agente {
     public void agisci(Mappa mappa) {
 
         raccogliRisorsa(mappa);
+
+        if (professione instanceof Medico) {
+            professione.agisci(this, mappa);
+        }
 
         stato.agisci(this, mappa);
     }
@@ -115,5 +116,24 @@ public class Umano extends Agente {
         }
 
         mappa.getRisorse().remove(risorsa);
+    }
+    public void cura(int quantita) {
+
+        salute += quantita;
+
+        if (salute > 100) {
+            salute = 100;
+        }
+
+        System.out.println(
+            "L'umano è stato curato! +" + quantita + " salute"
+        );
+
+        System.out.println(
+            "Salute umano: " + salute
+        );
+    }
+    public int getSalute() {
+        return salute;
     }
 }
