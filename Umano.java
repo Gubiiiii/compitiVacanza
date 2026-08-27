@@ -136,4 +136,8 @@ public class Umano extends Agente {
     public int getSalute() {
         return salute;
     }
+    public Zombie trasformatiInZombie() {
+        System.out.println("L'umano si è trasformato in zombie!");
+        return new Zombie(x, y);
+    }
 }

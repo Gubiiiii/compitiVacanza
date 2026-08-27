@@ -26,13 +26,18 @@ public class Mappa {
     public int getAltezza() {
         return altezza;
     }
+
     public void aggiungiAgente(Agente agente) {
         agenti.add(agente);
     }
+
+    public void rimuoviAgente(Agente agente) {
+        agenti.remove(agente);
+    }
+
     public List<Agente> getAgenti() {
         return agenti;
     }
-
 
     public List<Agente> getAgentiVicini(Agente agente) {
 
@@ -44,8 +49,13 @@ public class Mappa {
                 continue;
             }
 
-            int distanzaX = Math.abs(agente.getX() - altro.getX());
-            int distanzaY = Math.abs(agente.getY() - altro.getY());
+            int distanzaX = Math.abs(
+                agente.getX() - altro.getX()
+            );
+
+            int distanzaY = Math.abs(
+                agente.getY() - altro.getY()
+            );
 
             if (distanzaX <= 1 && distanzaY <= 1) {
                 vicini.add(altro);
@@ -54,9 +64,11 @@ public class Mappa {
 
         return vicini;
     }
+
     public void aggiungiRisorsa(Risorsa risorsa) {
         risorse.add(risorsa);
     }
+
     public List<Risorsa> getRisorse() {
         return risorse;
     }

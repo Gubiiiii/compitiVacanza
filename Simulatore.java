@@ -19,6 +19,10 @@ public class Simulatore {
         agenti.add(agente);
     }
 
+    public void rimuoviAgente(Agente agente) {
+        agenti.remove(agente);
+    }
+
     public void aggiungiObserver(Observer observer) {
         osservatori.add(observer);
     }
@@ -69,6 +73,16 @@ public class Simulatore {
                 Agente primo = agenti.get(i);
                 Agente secondo = agenti.get(j);
 
+                // Consideriamo solo collisioni tra Umano e Zombie
+                boolean umanoZombie =
+                    (primo instanceof Umano && secondo instanceof Zombie)
+                    ||
+                    (primo instanceof Zombie && secondo instanceof Umano);
+
+                if (!umanoZombie) {
+                    continue;
+                }
+
                 if (primo.siTrovaNellaStessaPosizione(secondo)) {
 
                     String evento =
@@ -82,14 +96,41 @@ public class Simulatore {
                     notificaObserver(evento);
 
                     if (primo instanceof Zombie && secondo instanceof Umano) {
-                        ((Zombie) primo).attacca((Umano) secondo);
+
+                        Zombie zombie = (Zombie) primo;
+                        Umano umano = (Umano) secondo;
+
+                        zombie.attacca(umano);
+
+                        controllaTrasformazione(umano);
                     }
 
                     if (primo instanceof Umano && secondo instanceof Zombie) {
-                        ((Zombie) secondo).attacca((Umano) primo);
+
+                        Umano umano = (Umano) primo;
+                        Zombie zombie = (Zombie) secondo;
+
+                        zombie.attacca(umano);
+
+                        controllaTrasformazione(umano);
                     }
                 }
             }
+        }
+    }
+
+    private void controllaTrasformazione(Umano umano) {
+        if (!umano.isVivo()) {
+            Zombie nuovoZombie = umano.trasformatiInZombie();
+            rimuoviAgente(umano);
+            mappa.rimuoviAgente(umano);
+
+            aggiungiAgente(nuovoZombie);
+            mappa.aggiungiAgente(nuovoZombie);
+
+            notificaObserver(
+                "Un umano è diventato uno zombie!"
+            );
         }
     }
 }

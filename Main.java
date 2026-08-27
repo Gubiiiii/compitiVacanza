@@ -16,16 +16,19 @@ public class Main {
         Runner runner = (Runner) runnerFactory.creaAgente(2, 6);
         Tank tank = (Tank) tankFactory.creaAgente(8, 6);
 
-        // Aggiunta degli agenti alla mappa
+        // Facciamo partire l'umano con 20 salute
+        umano.subisciDanno(80);
+
+        // Aggiungiamo gli agenti alla mappa
         mappa.aggiungiAgente(umano);
         mappa.aggiungiAgente(zombie);
         mappa.aggiungiAgente(runner);
         mappa.aggiungiAgente(tank);
 
-        // Creazione del simulatore
+        // Creiamo il simulatore
         Simulatore simulatore = new Simulatore(mappa);
 
-        // Aggiunta degli agenti al simulatore
+        // Aggiungiamo gli agenti al simulatore
         simulatore.aggiungiAgente(umano);
         simulatore.aggiungiAgente(zombie);
         simulatore.aggiungiAgente(runner);
