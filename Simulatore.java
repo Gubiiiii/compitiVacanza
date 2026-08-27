@@ -7,12 +7,14 @@ public class Simulatore {
     private List<Agente> agenti;
     private List<Observer> osservatori;
     private int tick;
+    private boolean simulazioneTerminata;
 
     public Simulatore(Mappa mappa) {
         this.mappa = mappa;
         this.agenti = new ArrayList<>();
         this.osservatori = new ArrayList<>();
         this.tick = 0;
+        this.simulazioneTerminata = false;
     }
 
     public void aggiungiAgente(Agente agente) {
@@ -35,6 +37,7 @@ public class Simulatore {
     }
 
     public void eseguiTurno() {
+        if (simulazioneTerminata) {return;}
 
         tick++;
 
@@ -56,6 +59,12 @@ public class Simulatore {
 
         // FASE 3: COLLISIONI
         controllaCollisioni();
+
+        if (controllaFineSimulazione()) {
+            simulazioneTerminata = true;
+            System.out.println("=== SIMULAZIONE TERMINATA ===");
+            return;
+        }
 
         notificaObserver(
             "Fine Tick " + tick
@@ -132,5 +141,59 @@ public class Simulatore {
                 "Un umano è diventato uno zombie!"
             );
         }
+    }
+    private boolean controllaFineSimulazione() {
+        boolean ciSonoUmani = false;
+        boolean ciSonoZombie = false;
+
+        for (Agente agente : agenti) {
+
+            if (!agente.isVivo()) {
+                continue;
+            }
+
+            if (agente instanceof Umano) {
+                ciSonoUmani = true;
+            }
+
+            if (agente instanceof Zombie) {
+                ciSonoZombie = true;
+            }
+        }
+
+        if (!ciSonoUmani && ciSonoZombie) {
+
+            System.out.println("Gli zombie hanno vinto!");
+
+            notificaObserver(
+                "Gli zombie hanno vinto!"
+            );
+
+            return true;
+        }
+
+        if (ciSonoUmani && !ciSonoZombie) {
+
+            System.out.println("Gli umani hanno vinto!");
+
+            notificaObserver(
+                "Gli umani hanno vinto!"
+            );
+
+            return true;
+        }
+
+        if (!ciSonoUmani && !ciSonoZombie) {
+
+            System.out.println("Non ci sono più agenti!");
+
+            notificaObserver(
+                "La simulazione è terminata senza vincitori."
+            );
+
+            return true;
+        }
+
+        return false;
     }
 }
