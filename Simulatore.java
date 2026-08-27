@@ -5,11 +5,13 @@ public class Simulatore {
 
     private Mappa mappa;
     private List<Agente> agenti;
+    private List<Observer> osservatori;
     private int tick;
 
     public Simulatore(Mappa mappa) {
         this.mappa = mappa;
         this.agenti = new ArrayList<>();
+        this.osservatori = new ArrayList<>();
         this.tick = 0;
     }
 
@@ -17,11 +19,26 @@ public class Simulatore {
         agenti.add(agente);
     }
 
+    public void aggiungiObserver(Observer observer) {
+        osservatori.add(observer);
+    }
+
+    public void notificaObserver(String evento) {
+
+        for (Observer observer : osservatori) {
+            observer.aggiorna(evento);
+        }
+    }
+
     public void eseguiTurno() {
 
         tick++;
 
         System.out.println("=== TICK " + tick + " ===");
+
+        notificaObserver(
+            "Inizio Tick " + tick
+        );
 
         // FASE 1: PERCEZIONE
         for (Agente agente : agenti) {
@@ -35,6 +52,10 @@ public class Simulatore {
 
         // FASE 3: COLLISIONI
         controllaCollisioni();
+
+        notificaObserver(
+            "Fine Tick " + tick
+        );
 
         System.out.println();
     }
@@ -50,12 +71,15 @@ public class Simulatore {
 
                 if (primo.siTrovaNellaStessaPosizione(secondo)) {
 
-                    System.out.println(
+                    String evento =
                         "COLLISIONE tra " +
                         primo.getClass().getSimpleName() +
                         " e " +
-                        secondo.getClass().getSimpleName()
-                    );
+                        secondo.getClass().getSimpleName();
+
+                    System.out.println(evento);
+
+                    notificaObserver(evento);
 
                     if (primo instanceof Zombie && secondo instanceof Umano) {
                         ((Zombie) primo).attacca((Umano) secondo);

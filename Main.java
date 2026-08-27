@@ -2,32 +2,38 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Creiamo la mappa
         Mappa mappa = new Mappa(10, 10);
 
-        // Creiamo il medico
-        Umano medico = new Umano(4, 3);
-        medico.setProfessione(new Medico());
+        // Factory
+        AgenteFactory umanoFactory = new UmanoFactory();
+        AgenteFactory zombieFactory = new ZombieFactory();
+        AgenteFactory runnerFactory = new RunnerFactory();
+        AgenteFactory tankFactory = new TankFactory();
 
-        // Feriamo il medico
-        medico.subisciDanno(70);
+        // Creazione degli agenti tramite Factory
+        Umano umano = (Umano) umanoFactory.creaAgente(4, 3);
+        Zombie zombie = (Zombie) zombieFactory.creaAgente(8, 3);
+        Runner runner = (Runner) runnerFactory.creaAgente(2, 6);
+        Tank tank = (Tank) tankFactory.creaAgente(8, 6);
 
-        // Gli diamo un Medikit
-        medico.aggiungiOggetto(new Medikit(30));
-
-        // Creiamo uno zombie lontano
-        Zombie zombie = new Zombie(8, 3);
-
-        // Aggiungiamo gli agenti alla mappa
-        mappa.aggiungiAgente(medico);
+        // Aggiunta degli agenti alla mappa
+        mappa.aggiungiAgente(umano);
         mappa.aggiungiAgente(zombie);
+        mappa.aggiungiAgente(runner);
+        mappa.aggiungiAgente(tank);
 
-        // Creiamo il simulatore
+        // Creazione del simulatore
         Simulatore simulatore = new Simulatore(mappa);
 
-        // Aggiungiamo gli agenti al simulatore
-        simulatore.aggiungiAgente(medico);
+        // Aggiunta degli agenti al simulatore
+        simulatore.aggiungiAgente(umano);
         simulatore.aggiungiAgente(zombie);
+        simulatore.aggiungiAgente(runner);
+        simulatore.aggiungiAgente(tank);
+
+        // Observer
+        Console console = new Console();
+        simulatore.aggiungiObserver(console);
 
         // Eseguiamo 3 turni
         simulatore.eseguiTurno();
