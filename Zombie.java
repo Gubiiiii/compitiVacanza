@@ -40,6 +40,7 @@ public class Zombie extends Agente {
         System.out.println("Lo zombie morde l'umano! -" + danno + " salute");
 
         System.out.println("Salute umano: " + umano.getSalute());
+        umano.infetta();
     }
     
 }

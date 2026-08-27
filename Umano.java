@@ -140,4 +140,14 @@ public class Umano extends Agente {
         System.out.println("L'umano si è trasformato in zombie!");
         return new Zombie(x, y);
     }
+    public void infetta() {
+        if (!(stato instanceof Infetto)) {
+
+            setStato(new Infetto());
+
+            System.out.println(
+                "L'umano è stato infettato!"
+            );
+        }
+    }
 }

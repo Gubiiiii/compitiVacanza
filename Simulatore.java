@@ -129,8 +129,14 @@ public class Simulatore {
     }
 
     private void controllaTrasformazione(Umano umano) {
+        if (umano.getStato() instanceof Infetto) {
+            return;
+        }
+
         if (!umano.isVivo()) {
+
             Zombie nuovoZombie = umano.trasformatiInZombie();
+
             rimuoviAgente(umano);
             mappa.rimuoviAgente(umano);
 
@@ -145,18 +151,20 @@ public class Simulatore {
     private boolean controllaFineSimulazione() {
         boolean ciSonoUmani = false;
         boolean ciSonoZombie = false;
-
         for (Agente agente : agenti) {
 
-            if (!agente.isVivo()) {
-                continue;
-            }
-
             if (agente instanceof Umano) {
-                ciSonoUmani = true;
+
+                Umano umano = (Umano) agente;
+
+                if (umano.isVivo() ||
+                    umano.getStato() instanceof Infetto) {
+
+                    ciSonoUmani = true;
+                }
             }
 
-            if (agente instanceof Zombie) {
+            if (agente instanceof Zombie && agente.isVivo()) {
                 ciSonoZombie = true;
             }
         }
@@ -185,7 +193,9 @@ public class Simulatore {
 
         if (!ciSonoUmani && !ciSonoZombie) {
 
-            System.out.println("Non ci sono più agenti!");
+            System.out.println(
+                "Non ci sono più agenti!"
+            );
 
             notificaObserver(
                 "La simulazione è terminata senza vincitori."
