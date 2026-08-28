@@ -6,12 +6,14 @@ public class Umano extends Agente {
     private StatoUmano stato;
     private Professione professione;
     private List<Oggetto> inventario;
+    private int tickInfezione;
     public Umano(int x, int y) {
         super(x, y, 100, 2);
 
         this.stato = new InEsplorazione();
         this.professione = new Civile();
         this.inventario = new ArrayList<>();
+        this.tickInfezione = 0;
     }
 
     public void setStato(StatoUmano stato) {
@@ -144,10 +146,22 @@ public class Umano extends Agente {
         if (!(stato instanceof Infetto)) {
 
             setStato(new Infetto());
+            tickInfezione = 0;
 
             System.out.println(
                 "L'umano è stato infettato!"
             );
         }
+    }
+    public void aumentaTickInfezione() {
+        tickInfezione++;
+
+        System.out.println(
+            "Tick infezione: " + tickInfezione
+        );
+    }
+
+    public int getTickInfezione() {
+        return tickInfezione;
     }
 }
