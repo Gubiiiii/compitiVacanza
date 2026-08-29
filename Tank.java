@@ -6,9 +6,19 @@ public class Tank extends Zombie {
 
     @Override
     public void agisci(Mappa mappa) {
-        System.out.println("Il Tank avanza lentamente!");
-        muovi(1, 0, mappa);
 
-        System.out.println("Tank: (" + x + ", " + y + ")");
+        System.out.println("Il Tank avanza lentamente!");
+
+        Umano bersaglio = trovaBersaglio(mappa);
+
+        if (bersaglio != null) {
+            insegui(bersaglio, mappa);
+        } else {
+            muovi(velocita, 0, mappa);
+        }
+
+        System.out.println(
+            "Tank: (" + x + ", " + y + ")"
+        );
     }
 }

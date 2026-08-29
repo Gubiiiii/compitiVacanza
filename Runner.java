@@ -9,7 +9,13 @@ public class Runner extends Zombie {
 
         System.out.println("Il Runner si muove velocemente!");
 
-        muovi(velocita, 0, mappa);
+        Umano bersaglio = trovaBersaglio(mappa);
+
+        if (bersaglio != null) {
+            insegui(bersaglio, mappa);
+        } else {
+            muovi(velocita, 0, mappa);
+        }
 
         System.out.println(
             "Runner: (" + x + ", " + y + ")"

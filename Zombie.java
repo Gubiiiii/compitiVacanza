@@ -18,7 +18,12 @@ public class Zombie extends Agente {
         for (Agente agente : vicini) {
 
             if (agente instanceof Umano) {
-                System.out.println("Lo zombie fiuta un umano!");
+
+                Umano umano = (Umano) agente;
+
+                if (umano.isVivo()) {
+                    System.out.println("Lo zombie fiuta un umano!");
+                }
             }
         }
     }
@@ -26,11 +31,67 @@ public class Zombie extends Agente {
     @Override
     public void agisci(Mappa mappa) {
 
-        muovi(-1, 0, mappa);
+        Umano bersaglio = trovaBersaglio(mappa);
 
-        System.out.println(
-            "Lo zombie si muove a (" + x + ", " + y + ")"
-        );
+        if (bersaglio != null) {
+            insegui(bersaglio, mappa);
+        } else {
+            muovi(-velocita, 0, mappa);
+
+            System.out.println(
+                "Lo zombie si muove a (" + x + ", " + y + ")"
+            );
+        }
+    }
+
+    protected Umano trovaBersaglio(Mappa mappa) {
+
+        Umano bersaglio = null;
+        int distanzaMinima = Integer.MAX_VALUE;
+
+        for (Agente agente : mappa.getAgenti()) {
+
+            if (agente instanceof Umano) {
+
+                Umano umano = (Umano) agente;
+
+                if (!umano.isVivo()) {
+                    continue;
+                }
+
+                int distanza = distanzaDa(umano);
+
+                if (distanza < distanzaMinima) {
+                    distanzaMinima = distanza;
+                    bersaglio = umano;
+                }
+            }
+        }
+
+        return bersaglio;
+    }
+
+    protected void insegui(Umano bersaglio, Mappa mappa) {
+
+        int dx = 0;
+        int dy = 0;
+
+        if (bersaglio.getX() > x) {
+            dx = velocita;
+        } else if (bersaglio.getX() < x) {
+            dx = -velocita;
+        }
+
+        if (dx == 0) {
+
+            if (bersaglio.getY() > y) {
+                dy = velocita;
+            } else if (bersaglio.getY() < y) {
+                dy = -velocita;
+            }
+        }
+
+        muovi(dx, dy, mappa);
     }
 
     public void attacca(Umano umano) {
