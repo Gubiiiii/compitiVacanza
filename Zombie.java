@@ -96,6 +96,10 @@ public class Zombie extends Agente {
 
     public void attacca(Umano umano) {
 
+        if (!isVivo() || !umano.isVivo()) {
+            return;
+        }
+
         int danno = 20;
 
         umano.subisciDanno(danno);

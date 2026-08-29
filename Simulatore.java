@@ -38,11 +38,15 @@ public class Simulatore {
         notificaObserver("Inizio Tick " + tick);
 
         for (Agente agente : new ArrayList<>(agenti)) {
-            agente.percepisci(mappa);
+            if (agente.isVivo()) {
+                agente.percepisci(mappa);
+            }
         }
 
         for (Agente agente : new ArrayList<>(agenti)) {
-            agente.agisci(mappa);
+            if (agente.isVivo()) {
+                agente.agisci(mappa);
+            }
         }
 
         controllaTrasformazioni();
@@ -101,21 +105,24 @@ public class Simulatore {
                 Agente primo = agenti.get(i);
                 Agente secondo = agenti.get(j);
 
-                if (primo.siTrovaNellaStessaPosizione(secondo)) {
+                if (!primo.isVivo() || !secondo.isVivo()) {
+                    continue;
+                }
 
-                    if (primo instanceof Zombie &&
-                        secondo instanceof Umano &&
-                        secondo.isVivo()) {
+                if (!primo.siTrovaNellaStessaPosizione(secondo)) {
+                    continue;
+                }
 
-                        ((Zombie) primo).attacca((Umano) secondo);
-                    }
+                if (primo instanceof Zombie &&
+                    secondo instanceof Umano) {
 
-                    if (primo instanceof Umano &&
-                        secondo instanceof Zombie &&
-                        primo.isVivo()) {
+                    ((Zombie) primo).attacca((Umano) secondo);
+                }
 
-                        ((Zombie) secondo).attacca((Umano) primo);
-                    }
+                else if (primo instanceof Umano &&
+                         secondo instanceof Zombie) {
+
+                    ((Zombie) secondo).attacca((Umano) primo);
                 }
             }
         }
