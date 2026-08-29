@@ -5,6 +5,7 @@ public class Zombie extends Agente {
     public Zombie(int x, int y) {
         super(x, y, 80, 1);
     }
+
     public Zombie(int x, int y, int salute, int velocita) {
         super(x, y, salute, velocita);
     }
@@ -21,6 +22,7 @@ public class Zombie extends Agente {
             }
         }
     }
+
     @Override
     public void agisci(Mappa mappa) {
 
@@ -37,10 +39,16 @@ public class Zombie extends Agente {
 
         umano.subisciDanno(danno);
 
-        System.out.println("Lo zombie morde l'umano! -" + danno + " salute");
+        System.out.println(
+            "Lo zombie morde l'umano! -" + danno + " salute"
+        );
 
-        System.out.println("Salute umano: " + umano.getSalute());
-        umano.infetta();
+        System.out.println(
+            "Salute umano: " + umano.getSalute()
+        );
+
+        if (umano.getSalute() <= 0) {
+            umano.infetta();
+        }
     }
-    
 }
