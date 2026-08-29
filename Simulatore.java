@@ -76,7 +76,7 @@ public class Simulatore {
 
                     nuoviZombie.add(nuovoZombie);
 
-                    mappa.getAgenti().remove(umano);
+                    mappa.rimuoviAgente(umano);
                     agenti.remove(umano);
 
                     notificaObserver(
@@ -104,13 +104,15 @@ public class Simulatore {
                 if (primo.siTrovaNellaStessaPosizione(secondo)) {
 
                     if (primo instanceof Zombie &&
-                        secondo instanceof Umano) {
+                        secondo instanceof Umano &&
+                        secondo.isVivo()) {
 
                         ((Zombie) primo).attacca((Umano) secondo);
                     }
 
                     if (primo instanceof Umano &&
-                        secondo instanceof Zombie) {
+                        secondo instanceof Zombie &&
+                        primo.isVivo()) {
 
                         ((Zombie) secondo).attacca((Umano) primo);
                     }
@@ -126,18 +128,15 @@ public class Simulatore {
 
         for (Agente agente : agenti) {
 
-            if (agente instanceof Umano) {
+            if (agente instanceof Umano &&
+                agente.isVivo()) {
 
-                Umano umano = (Umano) agente;
-
-                if (umano.isVivo() ||
-                    umano.getStato() instanceof Infetto) {
-
-                    ciSonoUmani = true;
-                }
+                ciSonoUmani = true;
             }
 
-            if (agente instanceof Zombie && agente.isVivo()) {
+            if (agente instanceof Zombie &&
+                agente.isVivo()) {
+
                 ciSonoZombie = true;
             }
         }
