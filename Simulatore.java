@@ -5,59 +5,47 @@ public class Simulatore {
 
     private Mappa mappa;
     private List<Agente> agenti;
-    private List<Observer> osservatori;
     private int tick;
     private boolean simulazioneTerminata;
+    private List<Observer> observers;
 
     public Simulatore(Mappa mappa) {
         this.mappa = mappa;
         this.agenti = new ArrayList<>();
-        this.osservatori = new ArrayList<>();
         this.tick = 0;
         this.simulazioneTerminata = false;
+        this.observers = new ArrayList<>();
     }
 
     public void aggiungiAgente(Agente agente) {
         agenti.add(agente);
     }
 
-    public void rimuoviAgente(Agente agente) {
-        agenti.remove(agente);
-    }
-
     public void aggiungiObserver(Observer observer) {
-        osservatori.add(observer);
-    }
-
-    public void notificaObserver(String evento) {
-
-        for (Observer observer : osservatori) {
-            observer.aggiorna(evento);
-        }
+        observers.add(observer);
     }
 
     public void eseguiTurno() {
-        if (simulazioneTerminata) {return;}
+
+        if (simulazioneTerminata) {
+            return;
+        }
 
         tick++;
 
         System.out.println("=== TICK " + tick + " ===");
 
-        notificaObserver(
-            "Inizio Tick " + tick
-        );
+        notificaObserver("Inizio Tick " + tick);
 
-        // FASE 1: PERCEZIONE
-        for (Agente agente : agenti) {
+        for (Agente agente : new ArrayList<>(agenti)) {
             agente.percepisci(mappa);
         }
 
-        // FASE 2: AZIONE
-        for (Agente agente : agenti) {
+        for (Agente agente : new ArrayList<>(agenti)) {
             agente.agisci(mappa);
         }
 
-        // FASE 3: COLLISIONI
+        controllaTrasformazioni();
         controllaCollisioni();
 
         if (controllaFineSimulazione()) {
@@ -66,11 +54,42 @@ public class Simulatore {
             return;
         }
 
-        notificaObserver(
-            "Fine Tick " + tick
-        );
+        notificaObserver("Fine Tick " + tick);
 
         System.out.println();
+    }
+
+    private void controllaTrasformazioni() {
+
+        List<Zombie> nuoviZombie = new ArrayList<>();
+
+        for (Agente agente : new ArrayList<>(agenti)) {
+
+            if (agente instanceof Umano) {
+
+                Umano umano = (Umano) agente;
+
+                if (umano.getStato() instanceof Infetto &&
+                    umano.getTickInfezione() >= 3) {
+
+                    Zombie nuovoZombie = umano.trasformatiInZombie();
+
+                    nuoviZombie.add(nuovoZombie);
+
+                    mappa.getAgenti().remove(umano);
+                    agenti.remove(umano);
+
+                    notificaObserver(
+                        "Un umano è diventato uno zombie!"
+                    );
+                }
+            }
+        }
+
+        for (Zombie zombie : nuoviZombie) {
+            agenti.add(zombie);
+            mappa.aggiungiAgente(zombie);
+        }
     }
 
     private void controllaCollisioni() {
@@ -82,75 +101,29 @@ public class Simulatore {
                 Agente primo = agenti.get(i);
                 Agente secondo = agenti.get(j);
 
-                // Consideriamo solo collisioni tra Umano e Zombie
-                boolean umanoZombie =
-                    (primo instanceof Umano && secondo instanceof Zombie)
-                    ||
-                    (primo instanceof Zombie && secondo instanceof Umano);
-
-                if (!umanoZombie) {
-                    continue;
-                }
-
                 if (primo.siTrovaNellaStessaPosizione(secondo)) {
 
-                    String evento =
-                        "COLLISIONE tra " +
-                        primo.getClass().getSimpleName() +
-                        " e " +
-                        secondo.getClass().getSimpleName();
+                    if (primo instanceof Zombie &&
+                        secondo instanceof Umano) {
 
-                    System.out.println(evento);
-
-                    notificaObserver(evento);
-
-                    if (primo instanceof Zombie && secondo instanceof Umano) {
-
-                        Zombie zombie = (Zombie) primo;
-                        Umano umano = (Umano) secondo;
-
-                        zombie.attacca(umano);
-
-                        controllaTrasformazione(umano);
+                        ((Zombie) primo).attacca((Umano) secondo);
                     }
 
-                    if (primo instanceof Umano && secondo instanceof Zombie) {
+                    if (primo instanceof Umano &&
+                        secondo instanceof Zombie) {
 
-                        Umano umano = (Umano) primo;
-                        Zombie zombie = (Zombie) secondo;
-
-                        zombie.attacca(umano);
-
-                        controllaTrasformazione(umano);
+                        ((Zombie) secondo).attacca((Umano) primo);
                     }
                 }
             }
         }
     }
 
-    private void controllaTrasformazione(Umano umano) {
-        if (umano.getStato() instanceof Infetto) {
-            return;
-        }
-
-        if (!umano.isVivo()) {
-
-            Zombie nuovoZombie = umano.trasformatiInZombie();
-
-            rimuoviAgente(umano);
-            mappa.rimuoviAgente(umano);
-
-            aggiungiAgente(nuovoZombie);
-            mappa.aggiungiAgente(nuovoZombie);
-
-            notificaObserver(
-                "Un umano è diventato uno zombie!"
-            );
-        }
-    }
     private boolean controllaFineSimulazione() {
+
         boolean ciSonoUmani = false;
         boolean ciSonoZombie = false;
+
         for (Agente agente : agenti) {
 
             if (agente instanceof Umano) {
@@ -205,5 +178,12 @@ public class Simulatore {
         }
 
         return false;
+    }
+
+    private void notificaObserver(String messaggio) {
+
+        for (Observer observer : observers) {
+            observer.aggiorna(messaggio);
+        }
     }
 }

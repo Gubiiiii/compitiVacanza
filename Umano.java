@@ -26,6 +26,9 @@ public class Umano extends Agente {
 
     @Override
     public void percepisci(Mappa mappa) {
+        if (stato instanceof Infetto) {
+            return;
+        }
 
         List<Agente> vicini = mappa.getAgentiVicini(this);
 
@@ -36,10 +39,11 @@ public class Umano extends Agente {
                 System.out.println(
                     "L'umano vede uno zombie!"
                 );
-
                 if (professione instanceof Soldato) {
 
-                    setStato(new InCombattimento((Zombie) agente));
+                    setStato(
+                        new InCombattimento((Zombie) agente)
+                    );
                 } else if (professione instanceof Medico) {
                 } else {
                     setStato(new InFuga());
@@ -55,6 +59,10 @@ public class Umano extends Agente {
 
         if (professione instanceof Medico) {
             professione.agisci(this, mappa);
+        }
+
+        if (stato instanceof Infetto) {
+            aumentaTickInfezione();
         }
 
         stato.agisci(this, mappa);
@@ -85,7 +93,6 @@ public class Umano extends Agente {
 
     public void aggiungiOggetto(Oggetto oggetto) {
         inventario.add(oggetto);
-
         System.out.println("L'umano ha raccolto: " + oggetto.getNome());
     }
     public List<Oggetto> getInventario() {
@@ -94,43 +101,31 @@ public class Umano extends Agente {
     public void raccogliRisorsa(Mappa mappa) {
 
         Risorsa risorsa = mappa.getRisorsaAllaPosizione(x, y);
-
         if (risorsa == null) {
             return;
         }
-
         if (risorsa instanceof RisorsaMedikit) {
-
             RisorsaMedikit medikit = (RisorsaMedikit) risorsa;
-
             aggiungiOggetto(
                 new Medikit(medikit.getCura())
             );
-
         } else if (risorsa instanceof RisorsaMunizioni) {
-
             RisorsaMunizioni munizioni =
                 (RisorsaMunizioni) risorsa;
-
             aggiungiOggetto(
                 new Munizioni(munizioni.getQuantita())
             );
         }
-
         mappa.getRisorse().remove(risorsa);
     }
     public void cura(int quantita) {
-
         salute += quantita;
-
         if (salute > 100) {
             salute = 100;
         }
-
         System.out.println(
             "L'umano è stato curato! +" + quantita + " salute"
         );
-
         System.out.println(
             "Salute umano: " + salute
         );
