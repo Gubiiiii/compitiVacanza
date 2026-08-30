@@ -7,16 +7,24 @@ public class Mappa {
     private int altezza;
     private List<Agente> agenti;
     private List<Risorsa> risorse;
+    private List<Barricata> barricate;
+    private List<ZonaContaminata> zoneContaminate;
 
     public Mappa(int larghezza, int altezza) {
         this.larghezza = larghezza;
         this.altezza = altezza;
         this.agenti = new ArrayList<>();
-        risorse = new ArrayList<>();
+        this.risorse = new ArrayList<>();
+        this.barricate = new ArrayList<>();
+        this.zoneContaminate = new ArrayList<>();
     }
 
     public boolean posizioneValida(int x, int y) {
-        return x >= 0 && x < larghezza && y >= 0 && y < altezza;
+        return x >= 0 &&
+               x < larghezza &&
+               y >= 0 &&
+               y < altezza &&
+               !contieneBarricata(x, y);
     }
 
     public int getLarghezza() {
@@ -83,5 +91,45 @@ public class Mappa {
         }
 
         return null;
+    }
+
+    public void aggiungiBarricata(Barricata barricata) {
+        barricate.add(barricata);
+    }
+
+    public List<Barricata> getBarricate() {
+        return barricate;
+    }
+
+    public boolean contieneBarricata(int x, int y) {
+
+        for (Barricata barricata : barricate) {
+            if (barricata.getX() == x &&
+                barricata.getY() == y) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void aggiungiZonaContaminata(ZonaContaminata zona) {
+        zoneContaminate.add(zona);
+    }
+
+    public List<ZonaContaminata> getZoneContaminate() {
+        return zoneContaminate;
+    }
+
+    public boolean contieneZonaContaminata(int x, int y) {
+
+        for (ZonaContaminata zona : zoneContaminate) {
+            if (zona.getX() == x &&
+                zona.getY() == y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
