@@ -1,24 +1,40 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Simulatore {
+public class Simulatore implements Observer {
 
     private Mappa mappa;
     private List<Agente> agenti;
     private int tick;
+    private int maxTick;
     private boolean simulazioneTerminata;
     private List<Observer> observers;
+    private List<Umano> trasformazioniPendenti;
 
     public Simulatore(Mappa mappa) {
+        this(mappa, 1000);
+    }
+
+    public Simulatore(Mappa mappa, int maxTick) {
         this.mappa = mappa;
         this.agenti = new ArrayList<>();
         this.tick = 0;
+        this.maxTick = maxTick;
         this.simulazioneTerminata = false;
         this.observers = new ArrayList<>();
+        this.trasformazioniPendenti = new ArrayList<>();
     }
 
     public void aggiungiAgente(Agente agente) {
         agenti.add(agente);
+
+        if (!mappa.getAgenti().contains(agente)) {
+            mappa.aggiungiAgente(agente);
+        }
+
+        if (agente instanceof Umano) {
+            ((Umano) agente).aggiungiObserver(this);
+        }
     }
 
     public void aggiungiObserver(Observer observer) {
@@ -49,8 +65,10 @@ public class Simulatore {
             }
         }
 
-        controllaTrasformazioni();
+        applicaEffettiAmbientali();
         controllaCollisioni();
+        controllaTrasformazioni();
+        rimuoviZombieMorti();
 
         if (controllaFineSimulazione()) {
             simulazioneTerminata = true;
@@ -73,26 +91,85 @@ public class Simulatore {
 
                 Umano umano = (Umano) agente;
 
-                if (umano.getStato() instanceof Infetto &&
-                    umano.getTickInfezione() >= 3) {
+                if (umano.isVivo() &&
+                    umano.getStato() instanceof Infetto &&
+                    umano.getTickInfezione() >= 3 &&
+                    !trasformazioniPendenti.contains(umano)) {
 
-                    Zombie nuovoZombie = umano.trasformatiInZombie();
-
-                    nuoviZombie.add(nuovoZombie);
-
-                    mappa.rimuoviAgente(umano);
-                    agenti.remove(umano);
+                    trasformazioniPendenti.add(umano);
 
                     notificaObserver(
-                        "Un umano è diventato uno zombie!"
+                        "Un umano infetto sta per trasformarsi."
                     );
                 }
             }
         }
 
+        for (Umano umano : new ArrayList<>(trasformazioniPendenti)) {
+
+            if (!agenti.contains(umano)) {
+                trasformazioniPendenti.remove(umano);
+                continue;
+            }
+
+            ZombieFactory factory = new ZombieFactory();
+            Zombie nuovoZombie = (Zombie) factory.creaAgente(
+                umano.getX(),
+                umano.getY()
+            );
+
+            nuoviZombie.add(nuovoZombie);
+
+            umano.rimuoviObserver(this);
+            mappa.rimuoviAgente(umano);
+            agenti.remove(umano);
+            trasformazioniPendenti.remove(umano);
+
+            notificaObserver(
+                "Un umano è stato trasformato in zombie."
+            );
+        }
+
         for (Zombie zombie : nuoviZombie) {
-            agenti.add(zombie);
-            mappa.aggiungiAgente(zombie);
+            aggiungiAgente(zombie);
+        }
+    }
+
+    private void applicaEffettiAmbientali() {
+
+        for (Agente agente : new ArrayList<>(agenti)) {
+
+            if (agente instanceof Umano &&
+                agente.isVivo() &&
+                mappa.contieneZonaContaminata(
+                    agente.getX(),
+                    agente.getY()
+                )) {
+
+                Umano umano = (Umano) agente;
+                umano.infetta();
+
+                notificaObserver(
+                    "Un umano è entrato in una zona contaminata."
+                );
+            }
+        }
+    }
+
+    private void rimuoviZombieMorti() {
+
+        for (Agente agente : new ArrayList<>(agenti)) {
+
+            if (agente instanceof Zombie &&
+                !agente.isVivo()) {
+
+                agenti.remove(agente);
+                mappa.rimuoviAgente(agente);
+
+                notificaObserver(
+                    "Uno zombie è stato eliminato."
+                );
+            }
         }
     }
 
@@ -183,7 +260,37 @@ public class Simulatore {
             return true;
         }
 
+        if (tick >= maxTick) {
+
+            System.out.println(
+                "Stallo: limite massimo di turni raggiunto."
+            );
+
+            notificaObserver(
+                "Stallo: limite massimo di turni raggiunto."
+            );
+
+            return true;
+        }
+
         return false;
+    }
+
+    @Override
+    public void aggiorna(String evento) {
+        notificaObserver(evento);
+    }
+
+    @Override
+    public void onMortePerMorso(Umano umano) {
+
+        if (!trasformazioniPendenti.contains(umano)) {
+            trasformazioniPendenti.add(umano);
+        }
+
+        notificaObserver(
+            "Evento onMortePerMorso ricevuto dal simulatore."
+        );
     }
 
     private void notificaObserver(String messaggio) {
@@ -191,5 +298,49 @@ public class Simulatore {
         for (Observer observer : observers) {
             observer.aggiorna(messaggio);
         }
+    }
+
+    public int getTick() {
+        return tick;
+    }
+
+    public boolean isSimulazioneTerminata() {
+        return simulazioneTerminata;
+    }
+
+    public Mappa getMappa() {
+        return mappa;
+    }
+
+    public List<Agente> getAgenti() {
+        return new ArrayList<>(agenti);
+    }
+
+    public int contaUmaniVivi() {
+
+        int totale = 0;
+
+        for (Agente agente : agenti) {
+            if (agente instanceof Umano &&
+                agente.isVivo()) {
+                totale++;
+            }
+        }
+
+        return totale;
+    }
+
+    public int contaZombieVivi() {
+
+        int totale = 0;
+
+        for (Agente agente : agenti) {
+            if (agente instanceof Zombie &&
+                agente.isVivo()) {
+                totale++;
+            }
+        }
+
+        return totale;
     }
 }

@@ -7,6 +7,9 @@ public class Umano extends Agente {
     private Professione professione;
     private List<Oggetto> inventario;
     private int tickInfezione;
+    private List<Observer> observers;
+    private boolean mortePerMorsoNotificata;
+
     public Umano(int x, int y) {
         super(x, y, 100, 2);
 
@@ -14,6 +17,8 @@ public class Umano extends Agente {
         this.professione = new Civile();
         this.inventario = new ArrayList<>();
         this.tickInfezione = 0;
+        this.observers = new ArrayList<>();
+        this.mortePerMorsoNotificata = false;
     }
 
     public void setStato(StatoUmano stato) {
@@ -34,7 +39,8 @@ public class Umano extends Agente {
 
         for (Agente agente : vicini) {
 
-            if (agente instanceof Zombie) {
+            if (agente instanceof Zombie &&
+                agente.isVivo()) {
 
                 System.out.println(
                     "L'umano vede uno zombie!"
@@ -137,6 +143,31 @@ public class Umano extends Agente {
         System.out.println("L'umano si è trasformato in zombie!");
         return new Zombie(x, y);
     }
+
+    public void aggiungiObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void rimuoviObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void muoriPerMorso() {
+        if (mortePerMorsoNotificata) {
+            return;
+        }
+
+        mortePerMorsoNotificata = true;
+
+        System.out.println(
+            "L'umano è morto per un morso e avvia il contagio!"
+        );
+
+        for (Observer observer : observers) {
+            observer.onMortePerMorso(this);
+        }
+    }
+
     public void infetta() {
         if (!(stato instanceof Infetto)) {
 

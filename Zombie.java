@@ -113,7 +113,7 @@ public class Zombie extends Agente {
         );
 
         if (umano.getSalute() <= 0) {
-            umano.infetta();
+            umano.muoriPerMorso();
         }
     }
 }
