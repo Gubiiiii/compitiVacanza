@@ -20,88 +20,169 @@ public class ScenarioFactory {
         Random random = new Random();
         Set<String> posizioniOccupate = new HashSet<>();
 
-        int[] posizioneSoldato = posizioneCasuale(random, posizioniOccupate);
-        int[] posizioneMedico = posizioneCasuale(random, posizioniOccupate);
-        int[] posizioneCivile = posizioneCasuale(random, posizioniOccupate);
-        int[] posizioneZombie = posizioneCasuale(random, posizioniOccupate);
-        int[] posizioneRunner = posizioneCasuale(random, posizioniOccupate);
-        int[] posizioneTank = posizioneCasuale(random, posizioniOccupate);
+        int numeroSoldati = random.nextInt(3) + 3;
+        int numeroMedici = random.nextInt(3) + 2;
+        int numeroCivili = random.nextInt(3) + 3;
 
-        Umano soldato = (Umano) umanoFactory.creaAgente(
-            posizioneSoldato[0],
-            posizioneSoldato[1]
-        );
-        soldato.setProfessione(new Soldato());
+        int numeroRunner = random.nextInt(3) + 2;
+        int numeroTank = random.nextInt(2) + 1;
 
-        Umano medico = (Umano) umanoFactory.creaAgente(
-            posizioneMedico[0],
-            posizioneMedico[1]
-        );
-        medico.setProfessione(new Medico());
+        for (int i = 0; i < numeroSoldati; i++) {
 
-        Umano civile = (Umano) umanoFactory.creaAgente(
-            posizioneCivile[0],
-            posizioneCivile[1]
-        );
-        civile.setProfessione(new Civile());
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
 
-        Zombie zombie = (Zombie) zombieFactory.creaAgente(
-            posizioneZombie[0],
-            posizioneZombie[1]
-        );
+            Umano soldato = (Umano) umanoFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
 
-        Runner runner = (Runner) runnerFactory.creaAgente(
-            posizioneRunner[0],
-            posizioneRunner[1]
-        );
+            soldato.setProfessione(new Soldato());
 
-        Tank tank = (Tank) tankFactory.creaAgente(
-            posizioneTank[0],
-            posizioneTank[1]
-        );
+            simulatore.aggiungiAgente(soldato);
+        }
 
-        mappa.aggiungiRisorsa(
-            new RisorsaMunizioni(4, 3, 10)
-        );
+        for (int i = 0; i < numeroMedici; i++) {
 
-        mappa.aggiungiRisorsa(
-            new RisorsaMunizioni(6, 5, 6)
-        );
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
 
-        mappa.aggiungiRisorsa(
-            new RisorsaMedikit(2, 2, 30)
-        );
+            Umano medico = (Umano) umanoFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
 
-        mappa.aggiungiRisorsa(
-            new RisorsaMedikit(5, 1, 20)
-        );
+            medico.setProfessione(new Medico());
 
-        mappa.aggiungiBarricata(
-            new Barricata(7, 4, 100)
-        );
+            simulatore.aggiungiAgente(medico);
+        }
 
-        mappa.aggiungiBarricata(
-            new Barricata(7, 5, 100)
-        );
+        for (int i = 0; i < numeroCivili; i++) {
 
-        mappa.aggiungiBarricata(
-            new Barricata(7, 6, 100)
-        );
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
 
-        mappa.aggiungiZonaContaminata(
-            new ZonaContaminata(1, 6)
-        );
+            Umano civile = (Umano) umanoFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
 
-        mappa.aggiungiZonaContaminata(
-            new ZonaContaminata(8, 2)
-        );
+            civile.setProfessione(new Civile());
 
-        simulatore.aggiungiAgente(soldato);
-        simulatore.aggiungiAgente(medico);
-        simulatore.aggiungiAgente(civile);
-        simulatore.aggiungiAgente(zombie);
-        simulatore.aggiungiAgente(runner);
-        simulatore.aggiungiAgente(tank);
+            simulatore.aggiungiAgente(civile);
+        }
+
+
+        for (int i = 0; i < numeroRunner; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            Runner runner = (Runner) runnerFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
+
+            simulatore.aggiungiAgente(runner);
+        }
+
+        for (int i = 0; i < numeroTank; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            Tank tank = (Tank) tankFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
+
+            simulatore.aggiungiAgente(tank);
+        }
+
+        int numeroMunizioni = random.nextInt(3) + 3;
+
+        for (int i = 0; i < numeroMunizioni; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            int quantita = random.nextInt(11) + 5;
+
+            mappa.aggiungiRisorsa(
+                new RisorsaMunizioni(
+                    posizione[0],
+                    posizione[1],
+                    quantita
+                )
+            );
+        }
+
+        int numeroMedikit = random.nextInt(3) + 3;
+
+        for (int i = 0; i < numeroMedikit; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            int cura = random.nextInt(21) + 20;
+
+            mappa.aggiungiRisorsa(
+                new RisorsaMedikit(
+                    posizione[0],
+                    posizione[1],
+                    cura
+                )
+            );
+        }
+
+        int numeroBarricate = random.nextInt(6) + 5;
+
+        for (int i = 0; i < numeroBarricate; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            mappa.aggiungiBarricata(
+                new Barricata(
+                    posizione[0],
+                    posizione[1],
+                    100
+                )
+            );
+        }
+
+        int numeroZoneContaminate = random.nextInt(4) + 3;
+
+        for (int i = 0; i < numeroZoneContaminate; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            mappa.aggiungiZonaContaminata(
+                new ZonaContaminata(
+                    posizione[0],
+                    posizione[1]
+                )
+            );
+        }
 
         if (usaConsole) {
             simulatore.aggiungiObserver(new Console());

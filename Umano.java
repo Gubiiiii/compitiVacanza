@@ -39,18 +39,11 @@ public class Umano extends Agente {
 
         for (Agente agente : vicini) {
 
-            if (agente instanceof Zombie &&
-                agente.isVivo()) {
-
-                System.out.println(
-                    "L'umano vede uno zombie!"
-                );
+            if (agente instanceof Zombie &&agente.isVivo()) {
+                System.out.println("L'umano vede uno zombie!");
                 if (professione instanceof Soldato) {
 
-                    setStato(
-                        new InCombattimento((Zombie) agente)
-                    );
-                } else if (professione instanceof Medico) {
+                    setStato(new InCombattimento((Zombie) agente));
                 } else {
                     setStato(new InFuga());
                 }
