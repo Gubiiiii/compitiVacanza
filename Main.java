@@ -5,8 +5,7 @@ public class Main {
         if (args.length > 0 &&
             args[0].equalsIgnoreCase("console")) {
 
-            Simulatore simulatore =
-                ScenarioFactory.creaScenarioBase(true);
+            Simulatore simulatore =ScenarioFactory.creaScenarioBase(true);
 
             for (int i = 0; i < 30; i++) {
                 simulatore.eseguiTurno();
@@ -16,7 +15,12 @@ public class Main {
         }
 
         javax.swing.SwingUtilities.invokeLater(
-            () -> new SimulatoreGUI().setVisible(true)
+            new Runnable() {
+                @Override
+                public void run() {
+                    new SimulatoreGUI().setVisible(true);
+                }
+            }
         );
     }
 }
