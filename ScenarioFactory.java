@@ -10,7 +10,7 @@ public class ScenarioFactory {
     public static Simulatore creaScenarioBase(boolean usaConsole) {
 
         Mappa mappa = new Mappa(20, 20);
-        Simulatore simulatore = new Simulatore(mappa, 1000);
+        Simulatore simulatore = new Simulatore(mappa, 250);
 
         AgenteFactory umanoFactory = new UmanoFactory();
         AgenteFactory zombieFactory = new ZombieFactory();
@@ -20,13 +20,13 @@ public class ScenarioFactory {
         Random random = new Random();
         Set<String> posizioniOccupate = new HashSet<>();
 
-        int numeroSoldati = random.nextInt(3) + 6;
-        int numeroMedici = random.nextInt(2) + 2;
+        int numeroSoldati = random.nextInt(3) + 2;
+        int numeroMedici = random.nextInt(2) + 4;
         int numeroCivili = random.nextInt(3) + 2;
 
-        int numeroZombie = random.nextInt(2) + 1;
+        //int numeroZombie = random.nextInt(4) + 1;
         int numeroRunner = random.nextInt(2) + 1;
-        int numeroTank = 1;
+        int numeroTank = random.nextInt(2) + 1;
 
         for (int i = 0; i < numeroSoldati; i++) {
 
@@ -84,19 +84,19 @@ public class ScenarioFactory {
         }
 
 
-        for (int i = 0; i < numeroZombie; i++) {
+        for (int i = 0; i < numeroTank; i++) {
 
             int[] posizione = posizioneCasuale(
                 random,
                 posizioniOccupate
             );
 
-            Zombie zombie = (Zombie) zombieFactory.creaAgente(
+            Tank tank = (Tank) tankFactory.creaAgente(
                 posizione[0],
                 posizione[1]
             );
 
-            simulatore.aggiungiAgente(zombie);
+            simulatore.aggiungiAgente(tank);
         }
 
         for (int i = 0; i < numeroRunner; i++) {
@@ -169,7 +169,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroBarricate = random.nextInt(6) + 5;
+        int numeroBarricate = random.nextInt(3) + 2;
 
         for (int i = 0; i < numeroBarricate; i++) {
 
@@ -187,7 +187,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroZoneContaminate = random.nextInt(4) + 3;
+        int numeroZoneContaminate = random.nextInt(2) + 2;
 
         for (int i = 0; i < numeroZoneContaminate; i++) {
 

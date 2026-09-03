@@ -37,18 +37,23 @@ public class Umano extends Agente {
             return;
         }
 
-        Zombie zombie = trovaZombiePiuVicino(mappa);
+        Zombie zombie = trovaZombieVicino(mappa);
 
         if (zombie == null) {
             return;
         }
 
-        if (professione instanceof Soldato) {
+        if (professione instanceof Soldato && puoCombattere()) {
             System.out.println("Il soldato punta lo zombie piu vicino!");
             setStato(new InCombattimento(zombie));
-        } else if (professione instanceof Civile) {
-            System.out.println("Il civile vede uno zombie e scappa!");
-            setStato(new InFuga(zombie));
+        } else {
+            System.out.println("L'umano vede uno zombie e scappa!");
+
+            if (stato instanceof InFuga) {
+                ((InFuga) stato).aggiornaMinaccia(zombie);
+            } else {
+                setStato(new InFuga(zombie));
+            }
         }
     }
 
@@ -58,6 +63,29 @@ public class Umano extends Agente {
         int distanzaMinima = Integer.MAX_VALUE;
 
         for (Agente agente : mappa.getAgenti()) {
+
+            if (!(agente instanceof Zombie) || !agente.isVivo()) {
+                continue;
+            }
+
+            Zombie zombie = (Zombie) agente;
+            int distanza = distanzaDa(zombie);
+
+            if (distanza < distanzaMinima) {
+                distanzaMinima = distanza;
+                bersaglio = zombie;
+            }
+        }
+
+        return bersaglio;
+    }
+
+    private Zombie trovaZombieVicino(Mappa mappa) {
+
+        Zombie bersaglio = null;
+        int distanzaMinima = Integer.MAX_VALUE;
+
+        for (Agente agente : mappa.getAgentiVicini(this)) {
 
             if (!(agente instanceof Zombie) || !agente.isVivo()) {
                 continue;
@@ -127,7 +155,7 @@ public class Umano extends Agente {
 
     public void attacca(Zombie zombie) {
 
-        int danno = 120;
+        int danno = 48;
 
         zombie.subisciDanno(danno);
 
@@ -154,6 +182,23 @@ public class Umano extends Agente {
     }
     public List<Oggetto> getInventario() {
         return inventario;
+    }
+
+    public boolean puoCombattere() {
+        if (!(professione instanceof Soldato)) {
+            return false;
+        }
+
+        for (Oggetto oggetto : inventario) {
+
+            if (oggetto instanceof Munizioni &&
+                ((Munizioni) oggetto).getQuantita() > 0) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
     public void raccogliRisorsa(Mappa mappa) {
 
@@ -190,18 +235,8 @@ public class Umano extends Agente {
     public int getSalute() {
         return salute;
     }
-    public Zombie trasformatiInZombie() {
-        System.out.println("L'umano si è trasformato in zombie!");
-
-        if (zombieContagio instanceof Runner) {
-            return new Runner(x, y);
-        }
-
-        if (zombieContagio instanceof Tank) {
-            return new Tank(x, y);
-        }
-
-        return new Zombie(x, y);
+    public Zombie getZombieContagio() {
+        return zombieContagio;
     }
 
     public void aggiungiObserver(Observer observer) {

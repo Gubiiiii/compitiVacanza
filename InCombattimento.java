@@ -67,6 +67,8 @@ public class InCombattimento implements StatoUmano {
                 System.out.println(
                     "ERRORE: " + e.getMessage()
                 );
+
+                umano.setStato(new InFuga(bersaglio));
             }
 
         } else {

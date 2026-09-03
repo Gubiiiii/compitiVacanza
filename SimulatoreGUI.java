@@ -64,17 +64,14 @@ public class SimulatoreGUI extends JFrame implements Observer {
         JButton avviaButton = new JButton("Avvia");
         JButton pausaButton = new JButton("Pausa");
         JButton turnoButton = new JButton("Turno");
-        JButton resetButton = new JButton("Reset");
 
         avviaButton.addActionListener(event -> timer.start());
         pausaButton.addActionListener(event -> timer.stop());
         turnoButton.addActionListener(event -> eseguiTurno());
-        resetButton.addActionListener(event -> resetSimulazione());
 
         bottoni.add(avviaButton);
         bottoni.add(pausaButton);
         bottoni.add(turnoButton);
-        bottoni.add(resetButton);
 
         pannello.add(titolo, BorderLayout.WEST);
         pannello.add(bottoni, BorderLayout.EAST);

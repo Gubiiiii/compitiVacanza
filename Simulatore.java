@@ -49,7 +49,7 @@ public class Simulatore implements Observer {
 
         tick++;
 
-        System.out.println("=== TICK " + tick + " ===");
+        System.out.println("TICK " + tick);
 
         notificaObserver("Inizio Tick " + tick);
 
@@ -112,7 +112,12 @@ public class Simulatore implements Observer {
                 continue;
             }
 
-            Zombie nuovoZombie = umano.trasformatiInZombie();
+            ZombieFactory factory = new ZombieFactory();
+            Zombie nuovoZombie = factory.creaDaMorso(
+                umano.getX(),
+                umano.getY(),
+                umano.getZombieContagio()
+            );
 
             nuoviZombie.add(nuovoZombie);
 
@@ -205,6 +210,7 @@ public class Simulatore implements Observer {
 
         boolean ciSonoUmani = false;
         boolean ciSonoZombie = false;
+        boolean ciSonoSoldatiArmati = false;
 
         for (Agente agente : agenti) {
 
@@ -212,6 +218,10 @@ public class Simulatore implements Observer {
                 agente.isVivo()) {
 
                 ciSonoUmani = true;
+
+                if (((Umano) agente).puoCombattere()) {
+                    ciSonoSoldatiArmati = true;
+                }
             }
 
             if (agente instanceof Zombie &&
@@ -238,6 +248,19 @@ public class Simulatore implements Observer {
 
             notificaObserver(
                 "Gli umani hanno vinto!"
+            );
+
+            return true;
+        }
+
+        if (ciSonoUmani && ciSonoZombie && !ciSonoSoldatiArmati) {
+
+            System.out.println(
+                "Gli zombie hanno vinto: non ci sono piu soldati armati!"
+            );
+
+            notificaObserver(
+                "Gli zombie hanno vinto: non ci sono piu soldati armati!"
             );
 
             return true;
