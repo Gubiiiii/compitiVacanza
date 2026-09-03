@@ -82,7 +82,7 @@ public class Zombie extends Agente {
             return;
         }
 
-        int danno = 50;
+        int danno = 20;
 
         umano.subisciDanno(danno);
 
