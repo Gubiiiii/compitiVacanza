@@ -9,6 +9,7 @@ public class Umano extends Agente {
     private int tickInfezione;
     private List<Observer> observers;
     private boolean mortePerMorsoNotificata;
+    private Zombie zombieContagio;
 
     public Umano(int x, int y) {
         super(x, y, 100, 2);
@@ -19,6 +20,7 @@ public class Umano extends Agente {
         this.tickInfezione = 0;
         this.observers = new ArrayList<>();
         this.mortePerMorsoNotificata = false;
+        this.zombieContagio = null;
     }
 
     public void setStato(StatoUmano stato) {
@@ -35,20 +37,73 @@ public class Umano extends Agente {
             return;
         }
 
-        List<Agente> vicini = mappa.getAgentiVicini(this);
+        Zombie zombie = trovaZombiePiuVicino(mappa);
 
-        for (Agente agente : vicini) {
+        if (zombie == null) {
+            return;
+        }
 
-            if (agente instanceof Zombie &&agente.isVivo()) {
-                System.out.println("L'umano vede uno zombie!");
-                if (professione instanceof Soldato) {
+        if (professione instanceof Soldato) {
+            System.out.println("Il soldato punta lo zombie piu vicino!");
+            setStato(new InCombattimento(zombie));
+        } else if (professione instanceof Civile) {
+            System.out.println("Il civile vede uno zombie e scappa!");
+            setStato(new InFuga(zombie));
+        }
+    }
 
-                    setStato(new InCombattimento((Zombie) agente));
-                } else {
-                    setStato(new InFuga());
-                }
+    public Zombie trovaZombiePiuVicino(Mappa mappa) {
+
+        Zombie bersaglio = null;
+        int distanzaMinima = Integer.MAX_VALUE;
+
+        for (Agente agente : mappa.getAgenti()) {
+
+            if (!(agente instanceof Zombie) || !agente.isVivo()) {
+                continue;
+            }
+
+            Zombie zombie = (Zombie) agente;
+            int distanza = distanzaDa(zombie);
+
+            if (distanza < distanzaMinima) {
+                distanzaMinima = distanza;
+                bersaglio = zombie;
             }
         }
+
+        return bersaglio;
+    }
+
+    public Umano trovaFeritoPiuVicino(Mappa mappa) {
+
+        Umano ferito = null;
+        int distanzaMinima = Integer.MAX_VALUE;
+
+        for (Agente agente : mappa.getAgenti()) {
+
+            if (!(agente instanceof Umano) ||
+                agente == this ||
+                !agente.isVivo()) {
+
+                continue;
+            }
+
+            Umano umano = (Umano) agente;
+
+            if (umano.getSalute() >= 100) {
+                continue;
+            }
+
+            int distanza = distanzaDa(umano);
+
+            if (distanza < distanzaMinima) {
+                distanzaMinima = distanza;
+                ferito = umano;
+            }
+        }
+
+        return ferito;
     }
 
     @Override
@@ -56,12 +111,15 @@ public class Umano extends Agente {
 
         raccogliRisorsa(mappa);
 
-        if (professione instanceof Medico) {
-            professione.agisci(this, mappa);
-        }
-
         if (stato instanceof Infetto) {
             aumentaTickInfezione();
+            stato.agisci(this, mappa);
+            return;
+        }
+
+        if (professione instanceof Medico) {
+            professione.agisci(this, mappa);
+            return;
         }
 
         stato.agisci(this, mappa);
@@ -69,7 +127,7 @@ public class Umano extends Agente {
 
     public void attacca(Zombie zombie) {
 
-        int danno = 10;
+        int danno = 120;
 
         zombie.subisciDanno(danno);
 
@@ -134,6 +192,15 @@ public class Umano extends Agente {
     }
     public Zombie trasformatiInZombie() {
         System.out.println("L'umano si è trasformato in zombie!");
+
+        if (zombieContagio instanceof Runner) {
+            return new Runner(x, y);
+        }
+
+        if (zombieContagio instanceof Tank) {
+            return new Tank(x, y);
+        }
+
         return new Zombie(x, y);
     }
 
@@ -146,10 +213,15 @@ public class Umano extends Agente {
     }
 
     public void muoriPerMorso() {
+        muoriPerMorso(null);
+    }
+
+    public void muoriPerMorso(Zombie zombie) {
         if (mortePerMorsoNotificata) {
             return;
         }
 
+        zombieContagio = zombie;
         mortePerMorsoNotificata = true;
 
         System.out.println(

@@ -73,25 +73,7 @@ public class Zombie extends Agente {
 
     protected void insegui(Umano bersaglio, Mappa mappa) {
 
-        int dx = 0;
-        int dy = 0;
-
-        if (bersaglio.getX() > x) {
-            dx = velocita;
-        } else if (bersaglio.getX() < x) {
-            dx = -velocita;
-        }
-
-        if (dx == 0) {
-
-            if (bersaglio.getY() > y) {
-                dy = velocita;
-            } else if (bersaglio.getY() < y) {
-                dy = -velocita;
-            }
-        }
-
-        muovi(dx, dy, mappa);
+        muoviVerso(bersaglio, mappa);
     }
 
     public void attacca(Umano umano) {
@@ -113,7 +95,7 @@ public class Zombie extends Agente {
         );
 
         if (umano.getSalute() <= 0) {
-            umano.muoriPerMorso();
+            umano.muoriPerMorso(this);
         }
     }
 }

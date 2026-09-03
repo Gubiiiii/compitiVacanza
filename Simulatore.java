@@ -112,11 +112,7 @@ public class Simulatore implements Observer {
                 continue;
             }
 
-            ZombieFactory factory = new ZombieFactory();
-            Zombie nuovoZombie = (Zombie) factory.creaAgente(
-                umano.getX(),
-                umano.getY()
-            );
+            Zombie nuovoZombie = umano.trasformatiInZombie();
 
             nuoviZombie.add(nuovoZombie);
 

@@ -17,7 +17,7 @@ public class InCombattimento implements StatoUmano {
 
         int distanza = umano.distanzaDa(bersaglio);
 
-        if (distanza <= 1) {
+        if (distanza <= 3) {
 
             try {
 
@@ -71,8 +71,10 @@ public class InCombattimento implements StatoUmano {
 
         } else {
 
+            umano.muoviVerso(bersaglio, mappa);
+
             System.out.println(
-                "Lo zombie è troppo lontano per essere attaccato."
+                "Il soldato avanza verso lo zombie."
             );
         }
     }

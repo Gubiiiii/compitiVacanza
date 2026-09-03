@@ -20,12 +20,13 @@ public class ScenarioFactory {
         Random random = new Random();
         Set<String> posizioniOccupate = new HashSet<>();
 
-        int numeroSoldati = random.nextInt(3) + 3;
-        int numeroMedici = random.nextInt(3) + 2;
-        int numeroCivili = random.nextInt(3) + 3;
+        int numeroSoldati = random.nextInt(3) + 6;
+        int numeroMedici = random.nextInt(2) + 2;
+        int numeroCivili = random.nextInt(3) + 2;
 
-        int numeroRunner = random.nextInt(3) + 2;
-        int numeroTank = random.nextInt(2) + 1;
+        int numeroZombie = random.nextInt(2) + 1;
+        int numeroRunner = random.nextInt(2) + 1;
+        int numeroTank = 1;
 
         for (int i = 0; i < numeroSoldati; i++) {
 
@@ -40,6 +41,9 @@ public class ScenarioFactory {
             );
 
             soldato.setProfessione(new Soldato());
+            soldato.aggiungiOggetto(
+                new Munizioni(random.nextInt(6) + 10)
+            );
 
             simulatore.aggiungiAgente(soldato);
         }
@@ -57,6 +61,7 @@ public class ScenarioFactory {
             );
 
             medico.setProfessione(new Medico());
+            medico.aggiungiOggetto(new Medikit(40));
 
             simulatore.aggiungiAgente(medico);
         }
@@ -78,6 +83,21 @@ public class ScenarioFactory {
             simulatore.aggiungiAgente(civile);
         }
 
+
+        for (int i = 0; i < numeroZombie; i++) {
+
+            int[] posizione = posizioneCasuale(
+                random,
+                posizioniOccupate
+            );
+
+            Zombie zombie = (Zombie) zombieFactory.creaAgente(
+                posizione[0],
+                posizione[1]
+            );
+
+            simulatore.aggiungiAgente(zombie);
+        }
 
         for (int i = 0; i < numeroRunner; i++) {
 
