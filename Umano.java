@@ -36,24 +36,32 @@ public class Umano extends Agente {
         if (stato instanceof Infetto) {
             return;
         }
+        if (professione instanceof Soldato && puoCombattere()) {
+            Zombie zombieLontano = trovaZombiePiuVicino(mappa);
+
+            if (zombieLontano != null) {
+                System.out.println("Il soldato punta lo zombie più vicino!");
+                setStato(new InCombattimento(zombieLontano));
+                return;
+            }
+        }
 
         Zombie zombie = trovaZombieVicino(mappa);
 
         if (zombie == null) {
+      
+            if (stato instanceof InFuga) {
+                setStato(new InEsplorazione());
+            }
             return;
         }
 
-        if (professione instanceof Soldato && puoCombattere()) {
-            System.out.println("Il soldato punta lo zombie piu vicino!");
-            setStato(new InCombattimento(zombie));
-        } else {
-            System.out.println("L'umano vede uno zombie e scappa!");
+        System.out.println("L'umano vede uno zombie e scappa!");
 
-            if (stato instanceof InFuga) {
-                ((InFuga) stato).aggiornaMinaccia(zombie);
-            } else {
-                setStato(new InFuga(zombie));
-            }
+        if (stato instanceof InFuga) {
+            ((InFuga) stato).aggiornaMinaccia(zombie);
+        } else {
+            setStato(new InFuga(zombie));
         }
     }
 

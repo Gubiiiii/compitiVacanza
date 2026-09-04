@@ -82,6 +82,10 @@ public class Zombie extends Agente {
             return;
         }
 
+        if (distanzaDa(umano) > 1) {
+            return;
+        }
+
         int danno = 20;
 
         umano.subisciDanno(danno);

@@ -187,19 +187,13 @@ public class Simulatore implements Observer {
                     continue;
                 }
 
-                if (!primo.siTrovaNellaStessaPosizione(secondo)) {
+                if (primo.distanzaDa(secondo) > 1) {
                     continue;
                 }
 
-                if (primo instanceof Zombie &&
-                    secondo instanceof Umano) {
-
+                if (primo instanceof Zombie && secondo instanceof Umano) {
                     ((Zombie) primo).attacca((Umano) secondo);
-                }
-
-                else if (primo instanceof Umano &&
-                         secondo instanceof Zombie) {
-
+                } else if (primo instanceof Umano && secondo instanceof Zombie) {
                     ((Zombie) secondo).attacca((Umano) primo);
                 }
             }
@@ -253,18 +247,6 @@ public class Simulatore implements Observer {
             return true;
         }
 
-        if (ciSonoUmani && ciSonoZombie && !ciSonoSoldatiArmati) {
-
-            System.out.println(
-                "Gli zombie hanno vinto: non ci sono piu soldati armati!"
-            );
-
-            notificaObserver(
-                "Gli zombie hanno vinto: non ci sono piu soldati armati!"
-            );
-
-            return true;
-        }
 
         if (!ciSonoUmani && !ciSonoZombie) {
 
