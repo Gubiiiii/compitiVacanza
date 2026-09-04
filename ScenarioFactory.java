@@ -19,13 +19,12 @@ public class ScenarioFactory {
         Random random = new Random();
         Set<String> posizioniOccupate = new HashSet<>();
 
-        int numeroSoldati = random.nextInt(3) + 2;
+        int numeroSoldati = random.nextInt(3) + 4;
         int numeroMedici = random.nextInt(2) + 4;
         int numeroCivili = random.nextInt(3) + 2;
 
-        //int numeroZombie = random.nextInt(4) + 1;
         int numeroRunner = random.nextInt(2) + 1;
-        int numeroTank = random.nextInt(2) + 1;
+        int numeroTank = random.nextInt(2) + 2;
 
         for (int i = 0; i < numeroSoldati; i++) {
 
@@ -128,7 +127,7 @@ public class ScenarioFactory {
             simulatore.aggiungiAgente(tank);
         }
 
-        int numeroMunizioni = random.nextInt(3) + 3;
+        int numeroMunizioni = random.nextInt(3) + 4;
 
         for (int i = 0; i < numeroMunizioni; i++) {
 
@@ -148,7 +147,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroMedikit = random.nextInt(3) + 3;
+        int numeroMedikit = random.nextInt(3) + 4;
 
         for (int i = 0; i < numeroMedikit; i++) {
 
@@ -168,7 +167,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroBarricate = random.nextInt(3) + 2;
+        int numeroBarricate = random.nextInt(3) + 6;
 
         for (int i = 0; i < numeroBarricate; i++) {
 
@@ -186,7 +185,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroZoneContaminate = random.nextInt(2) + 2;
+        int numeroZoneContaminate = random.nextInt(2) + 5;
 
         for (int i = 0; i < numeroZoneContaminate; i++) {
 

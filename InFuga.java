@@ -60,7 +60,7 @@ public class InFuga implements StatoUmano {
             int nuovaX = umano.getX() + direzione[0];
             int nuovaY = umano.getY() + direzione[1];
 
-            if (!mappa.posizioneValida(nuovaX, nuovaY)) {
+            if (!mappa.posizioneValidaPerMovimento(nuovaX, nuovaY, umano)) {
                 continue;
             }
 

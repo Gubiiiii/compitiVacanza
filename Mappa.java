@@ -132,4 +132,24 @@ public class Mappa {
 
         return false;
     }
+
+    public boolean posizioneOccupata(int x, int y, Agente escludi) {
+
+        for (Agente agente : agenti) {
+
+            if (agente == escludi || !agente.isVivo()) {
+                continue;
+            }
+
+            if (agente.getX() == x && agente.getY() == y) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean posizioneValidaPerMovimento(int x, int y, Agente agente) {
+        return posizioneValida(x, y) && !posizioneOccupata(x, y, agente);
+    }
 }

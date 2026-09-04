@@ -20,7 +20,7 @@ public abstract class Agente {
         int nuovaX = x + dx;
         int nuovaY = y + dy;
 
-        if (mappa.posizioneValida(nuovaX, nuovaY)) {
+        if (mappa.posizioneValidaPerMovimento(nuovaX, nuovaY, this)) {
             x = nuovaX;
             y = nuovaY;
         }
@@ -45,7 +45,7 @@ public abstract class Agente {
                 int nuovaX = x + direzione[0];
                 int nuovaY = y + direzione[1];
 
-                if (mappa.posizioneValida(nuovaX, nuovaY)) {
+                if (mappa.posizioneValidaPerMovimento(nuovaX, nuovaY, this)) {
                     direzioneScelta = direzione;
                     break;
                 }

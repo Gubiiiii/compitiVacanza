@@ -70,6 +70,8 @@ public class Simulatore implements Observer {
         controllaTrasformazioni();
         rimuoviZombieMorti();
 
+        rimuoviZombieMorti();
+
         if (controllaFineSimulazione()) {
             simulazioneTerminata = true;
             System.out.println("=== SIMULAZIONE TERMINATA ===");

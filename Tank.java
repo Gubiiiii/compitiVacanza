@@ -7,7 +7,7 @@ public class Tank extends Zombie {
     @Override
     public void agisci(Mappa mappa) {
 
-        System.out.println("Il Tank avanza lentamente!");
+        System.out.println("Il Tank va avanti lento");
 
         Umano bersaglio = trovaBersaglio(mappa);
 
