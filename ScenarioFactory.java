@@ -13,7 +13,6 @@ public class ScenarioFactory {
         Simulatore simulatore = new Simulatore(mappa, 250);
 
         AgenteFactory umanoFactory = new UmanoFactory();
-        AgenteFactory zombieFactory = new ZombieFactory();
         AgenteFactory runnerFactory = new RunnerFactory();
         AgenteFactory tankFactory = new TankFactory();
 

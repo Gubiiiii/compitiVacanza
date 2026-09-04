@@ -34,51 +34,30 @@ public abstract class Agente {
         muoviOttimizzandoDistanza(minaccia, mappa, false);
     }
 
-    private void muoviOttimizzandoDistanza(
-        Agente riferimento,
-        Mappa mappa,
-        boolean avvicina
-    ) {
-
+    private void muoviOttimizzandoDistanza(Agente riferimento,Mappa mappa,boolean avvicina) {
         for (int passo = 0; passo < velocita; passo++) {
-
-            int miglioreX = x;
-            int miglioreY = y;
-            int miglioreDistanza = distanzaDa(riferimento);
-
             int[][] direzioni = direzioniPreferite(riferimento, avvicina);
+
+            int[] direzioneScelta = null;
 
             for (int[] direzione : direzioni) {
 
                 int nuovaX = x + direzione[0];
                 int nuovaY = y + direzione[1];
 
-                if (!mappa.posizioneValida(nuovaX, nuovaY)) {
-                    continue;
-                }
-
-                int distanza = distanzaManhattan(
-                    nuovaX,
-                    nuovaY,
-                    riferimento.getX(),
-                    riferimento.getY()
-                );
-
-                if ((avvicina && distanza <= miglioreDistanza) ||
-                    (!avvicina && distanza >= miglioreDistanza)) {
-
-                    miglioreX = nuovaX;
-                    miglioreY = nuovaY;
-                    miglioreDistanza = distanza;
+                if (mappa.posizioneValida(nuovaX, nuovaY)) {
+                    direzioneScelta = direzione;
+                    break;
                 }
             }
 
-            if (miglioreX == x && miglioreY == y) {
+            if (direzioneScelta == null) {
+                // Completamente bloccato in ogni direzione: si ferma
                 return;
             }
 
-            x = miglioreX;
-            y = miglioreY;
+            x += direzioneScelta[0];
+            y += direzioneScelta[1];
         }
     }
 
@@ -122,15 +101,6 @@ public abstract class Agente {
         };
     }
 
-    private int distanzaManhattan(
-        int primaX,
-        int primaY,
-        int secondaX,
-        int secondaY
-    ) {
-        return Math.abs(primaX - secondaX) +
-               Math.abs(primaY - secondaY);
-    }
 
     public void subisciDanno(int danno) {
         salute -= danno;

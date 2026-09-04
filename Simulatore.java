@@ -12,7 +12,7 @@ public class Simulatore implements Observer {
     private List<Umano> trasformazioniPendenti;
 
     public Simulatore(Mappa mappa) {
-        this(mappa, 1000);
+        this(mappa, 150);
     }
 
     public Simulatore(Mappa mappa, int maxTick) {
@@ -204,7 +204,6 @@ public class Simulatore implements Observer {
 
         boolean ciSonoUmani = false;
         boolean ciSonoZombie = false;
-        boolean ciSonoSoldatiArmati = false;
 
         for (Agente agente : agenti) {
 
@@ -213,9 +212,6 @@ public class Simulatore implements Observer {
 
                 ciSonoUmani = true;
 
-                if (((Umano) agente).puoCombattere()) {
-                    ciSonoSoldatiArmati = true;
-                }
             }
 
             if (agente instanceof Zombie &&
