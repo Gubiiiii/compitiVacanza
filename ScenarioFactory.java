@@ -20,10 +20,10 @@ public class ScenarioFactory {
         Set<String> posizioniOccupate = new HashSet<>();
 
         int numeroSoldati = random.nextInt(3) + 4;
-        int numeroMedici = random.nextInt(2) + 4;
+        int numeroMedici = random.nextInt(2) + 2;
         int numeroCivili = random.nextInt(3) + 2;
 
-        int numeroRunner = random.nextInt(2) + 1;
+        int numeroRunner = random.nextInt(3) + 1;
         int numeroTank = random.nextInt(2) + 2;
 
         for (int i = 0; i < numeroSoldati; i++) {
@@ -185,7 +185,7 @@ public class ScenarioFactory {
             );
         }
 
-        int numeroZoneContaminate = random.nextInt(2) + 5;
+        int numeroZoneContaminate = random.nextInt(10) + 7;
 
         for (int i = 0; i < numeroZoneContaminate; i++) {
 

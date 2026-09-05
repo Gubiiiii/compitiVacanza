@@ -163,7 +163,7 @@ public class Umano extends Agente {
 
     public void attacca(Zombie zombie) {
 
-        int danno = 50;
+        int danno = 75;
 
         zombie.subisciDanno(danno);
 

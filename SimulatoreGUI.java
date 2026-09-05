@@ -56,7 +56,7 @@ public class SimulatoreGUI extends JFrame implements Observer {
         JPanel pannello = new JPanel(new BorderLayout(12, 0));
         pannello.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
-        JLabel titolo = new JLabel("Zombie Apocalypse");
+        JLabel titolo = new JLabel("ZOMBIE APOCALYPSE");
         titolo.setFont(new Font("SansSerif", Font.BOLD, 24));
 
         JPanel bottoni = new JPanel();
@@ -287,9 +287,9 @@ public class SimulatoreGUI extends JFrame implements Observer {
                 int y = offsetY + risorsa.getY() * lato;
 
                 if (risorsa instanceof RisorsaMedikit) {
-                    disegnaCella(g, x, y, lato, new Color(84, 163, 105), "+");
+                    disegnaCella(g, x, y, lato, new Color(255, 141, 74), "+");
                 } else if (risorsa instanceof RisorsaMunizioni) {
-                    disegnaCella(g, x, y, lato, new Color(210, 157, 58), "A");
+                    disegnaCella(g, x, y, lato, new Color(71, 190, 247), "A");
                 }
             }
         }
@@ -314,7 +314,7 @@ public class SimulatoreGUI extends JFrame implements Observer {
                 if (agente instanceof Runner) {
                     disegnaCella(g, x, y, lato, new Color(150, 72, 180), "R");
                 } else if (agente instanceof Tank) {
-                    disegnaCella(g, x, y, lato, new Color(105, 94, 80), "T");
+                    disegnaCella(g, x, y, lato, new Color(10, 204, 129), "T");
                 } else if (agente instanceof Zombie) {
                     disegnaCella(g, x, y, lato, new Color(122, 153, 57), "Z");
                 } else if (agente instanceof Umano) {

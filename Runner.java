@@ -1,7 +1,7 @@
 public class Runner extends Zombie {
 
     public Runner(int x, int y) {
-        super(x, y, 60, 2);
+        super(x, y, 50, 3);
     }
 
     @Override
